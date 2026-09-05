@@ -4,8 +4,8 @@ import * as React from "react";
 import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import styles from "./Hero.module.css";
 
-const FRAME_COUNT = 120;
-const FRAME_DIR = "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-";
+const FRAME_COUNT = 119;
+const FRAME_DIR = "/images/ezgif-48495279d47d4928-png-split/ezgif-frame-";
 const CANVAS_W = 1920;
 const CANVAS_H = 1080;
 

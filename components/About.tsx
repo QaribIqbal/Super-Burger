@@ -7,7 +7,7 @@ export default function About() {
       <div className={styles.about__inner}>
         <div className={styles.about__visual}>
           <Image
-            src="/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-060.png"
+            src="/images/ezgif-48495279d47d4928-png-split/ezgif-frame-060.png"
             alt="Founder at the grill, flipping burgers"
             fill
             priority={false}
