@@ -59,15 +59,15 @@ export default function Gallery() {
             What Customers Say
           </h3>
           <blockquote className={styles.gallery__quote}>
-            <p>"The best smash burgers in the city. Crispy edges, perfect melt, every time."</p>
+            <p>&quot;The best smash burgers in the city. Crispy edges, perfect melt, every time.&quot;</p>
             <cite>— Alex R.</cite>
           </blockquote>
           <blockquote className={styles.gallery__quote}>
-            <p>"Delivery in 28 minutes. Still hot. Actually hot."</p>
+            <p>&quot;Delivery in 28 minutes. Still hot. Actually hot.&quot;</p>
             <cite>— Maya T.</cite>
           </blockquote>
           <blockquote className={styles.gallery__quote}>
-            <p>"Finally a burger place that doesn't skimp on the patty."</p>
+            <p>&quot;Finally a burger place that doesn&apos;t skimp on the patty.&quot;</p>
             <cite>— Chris P.</cite>
           </blockquote>
         </div>

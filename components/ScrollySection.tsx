@@ -12,7 +12,6 @@ export default function ScrollySection() {
   const trackRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [loadedFrames, setLoadedFrames] = useState(0);
-  const [framesReady, setFramesReady] = useState(false);
 
   /* ── Scroll → progress mapping ──────────────────────────────────────── */
   const handleScroll = useCallback(() => {
@@ -39,20 +38,21 @@ export default function ScrollySection() {
   }, [handleScroll]);
 
   /* ── Loader ──────────────────────────────────────────────────────────── */
-  const loadPercent = Math.round((loadedFrames / 120) * 100);
+  const loadPercent = Math.round((loadedFrames / 119) * 100);
+  const firstFrameReady = loadedFrames > 0;
 
   /* ── Ghost text visibility (only during beat 1) ──────────────────────── */
   const showGhost = scrollProgress < 0.2;
 
   /* ── Scroll hint (only when progress is near 0) ──────────────────────── */
-  const showScrollHint = scrollProgress < 0.05 && framesReady;
+  const showScrollHint = scrollProgress < 0.05 && firstFrameReady;
 
   return (
     <section
       ref={trackRef}
       aria-label="Signature burger showcase"
       style={{ height: `${TRACK_HEIGHT_VH}vh` }}
-      id="how-its-made"
+      id="hero-build"
     >
       <div className={styles.sticky}>
         {/* ── Split cream / rust background ─────────────────────────────── */}
@@ -75,18 +75,17 @@ export default function ScrollySection() {
         <BurgerAnimation
           scrollProgress={scrollProgress}
           onLoadProgress={(loaded) => setLoadedFrames(loaded)}
-          onReady={() => setFramesReady(true)}
         />
 
         {/* ── Loading overlay ───────────────────────────────────────────── */}
         <div
           className={[
             styles.loader,
-            framesReady ? styles["loader--hidden"] : "",
+            firstFrameReady ? styles["loader--hidden"] : "",
           ]
             .filter(Boolean)
             .join(" ")}
-          aria-hidden={framesReady}
+          aria-hidden={firstFrameReady}
           role="status"
           aria-label={`Loading burger: ${loadPercent}%`}
         >

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import {
   menuItems,
@@ -73,7 +72,7 @@ export default function Menu() {
                 whiteSpace: "nowrap",
               }}
               onClick={() => setSelectedCategory(null)}
-              aria-selected={!selectedCategory}
+              aria-pressed={!selectedCategory}
               aria-label="Show all categories"
             >
               All Items
@@ -111,7 +110,7 @@ export default function Menu() {
                   whiteSpace: "nowrap",
                 }}
                 onClick={() => setSelectedCategory(category.id as MenuItem["category"])}
-                aria-selected={selectedCategory === category.id}
+                aria-pressed={selectedCategory === category.id}
                 aria-label={`Show ${category.label} menu`}
               >
                 {category.label}
@@ -135,7 +134,7 @@ export default function Menu() {
                 whiteSpace: "nowrap",
               }}
               onClick={() => setFilter("spicy")}
-              aria-selected={filter === "spicy"}
+              aria-pressed={filter === "spicy"}
               aria-label="Filter spicy items"
             >
               Spicy {filter === "spicy" ? "Active" : ""}
@@ -155,7 +154,7 @@ export default function Menu() {
                 whiteSpace: "nowrap",
               }}
               onClick={() => setFilter("veg")}
-              aria-selected={filter === "veg"}
+              aria-pressed={filter === "veg"}
               aria-label="Filter vegetarian items"
             >
               Veg {filter === "veg" ? "Active" : ""}
@@ -175,7 +174,7 @@ export default function Menu() {
                 whiteSpace: "nowrap",
               }}
               onClick={() => setFilter("popular")}
-              aria-selected={filter === "popular"}
+              aria-pressed={filter === "popular"}
               aria-label="Filter popular items"
             >
               Popular {filter === "popular" ? "Active" : ""}
@@ -234,6 +233,7 @@ export default function Menu() {
                     if (tag === "spicy") {
                       return (
                         <span
+                          key={tag}
                           style={{
                             fontFamily: "Work Sans, sans-serif",
                             fontSize: "0.625rem",
@@ -253,6 +253,7 @@ export default function Menu() {
                     if (tag === "veg") {
                       return (
                         <span
+                          key={tag}
                           style={{
                             fontFamily: "Work Sans, sans-serif",
                             fontSize: "0.625rem",
@@ -272,6 +273,7 @@ export default function Menu() {
                     if (tag === "popular") {
                       return (
                         <span
+                          key={tag}
                           style={{
                             fontFamily: "Work Sans, sans-serif",
                             fontSize: "0.625rem",

@@ -122,7 +122,7 @@ export default function USP() {
                 color: "#2B1B12",
                 opacity: 0.7,
               }}>
-                We partner with local couriers to deliver your order within 30 minutes. Cold food isn't our thing.
+                We partner with local couriers to deliver your order within 30 minutes. Cold food isn&apos;t our thing.
               </p>
             </div>
           </div>

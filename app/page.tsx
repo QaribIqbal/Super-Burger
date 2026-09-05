@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import ScrollySection from "@/components/ScrollySection";
 import USP from "@/components/USP";
+import BurgerExplosionSection from "@/components/BurgerExplosionSection";
 import SignaturePicks from "@/components/SignaturePicks";
 import About from "@/components/About";
 import Gallery from "@/components/Gallery";
@@ -18,6 +19,7 @@ export default function Home() {
 
         {/* Downstream sections */}
         <USP />
+        <BurgerExplosionSection />
         <SignaturePicks />
         <About />
         <Gallery />

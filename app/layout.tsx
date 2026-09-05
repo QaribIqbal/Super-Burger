@@ -24,11 +24,11 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Super Burger Co. — Fresh. Loaded.",
-  description: "Smash burgers made fresh daily. Free delivery. Order now.",
+  title: "Super Burger Co. — Built Right.",
+  description: "Fresh-grilled, double-stacked burgers built layer by layer. Order Super Burger Co. for delivery or pickup.",
   openGraph: {
-    title: "Super Burger Co. — Fresh. Loaded.",
-    description: "Smash burgers made fresh daily. Free delivery. Order now.",
+    title: "Super Burger Co. — Built Right.",
+    description: "Fresh-grilled, double-stacked burgers built layer by layer.",
     type: "website",
   },
 };
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#EEDABF",
+  themeColor: "#F3E4C4",
 };
 
 export default function RootLayout({

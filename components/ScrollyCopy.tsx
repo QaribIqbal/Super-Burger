@@ -30,14 +30,14 @@ export default function ScrollyCopy({ scrollProgress }: ScrollyCopyProps) {
     <div className={styles.copyLayer} aria-live="polite">
       {/* ── Beat 1: Hero / Intro (0–18%) ─────────────────────────────────── */}
       <CopyPanel visible={inRange(p, BEATS.intro)} alignment="left">
-        <span className={styles.accent}>Super</span>
+        <span className={styles.accent}>Handcrafted, not fast.</span>
         <h1 className={styles.headline}>
-          Delicious,
+          Super burgers.
           <br />
-          Built Right
+          Seriously good.
         </h1>
         <p className={styles.body}>
-          Fresh-grilled, double-stacked, made to order — every single time.
+          Build your next favorite: two juicy patties, molten cheddar, and toppings piled sky-high.
         </p>
       </CopyPanel>
 
@@ -49,10 +49,10 @@ export default function ScrollyCopy({ scrollProgress }: ScrollyCopyProps) {
           by layer.
         </h2>
         <span className={styles.bodyPoint}>
-          A toasted sesame bun, baked fresh each morning.
+          A toasted sesame bun, soft in the middle and golden on top.
         </span>
         <span className={styles.bodyPoint}>
-          Real cheddar, melted right at the flame — not microwaved on.
+          Real cheddar, melted right at the flame.
         </span>
       </CopyPanel>
 
@@ -80,8 +80,7 @@ export default function ScrollyCopy({ scrollProgress }: ScrollyCopyProps) {
           not steamed.
         </h2>
         <p className={styles.body}>
-          Two hand-formed patties, grilled hot and fast for a real crust —
-          because that&apos;s where the flavor lives.
+          Two hand-formed patties, grilled hot and fast for that caramelized edge.
         </p>
       </CopyPanel>
 
