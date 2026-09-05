@@ -1,7 +1,7 @@
 :root {
   /* Match the baked-in split backdrop used by the burger animation frames. */
   --color-cream: #EFDEC4;
-  --color-rust: rgb(170, 77, 51);
+  --color-rust: #B75A39;
   --color-rust-dark: #932E06;
   --color-ink: #2B1B12;
   --color-cream-text: #FBF3E3;

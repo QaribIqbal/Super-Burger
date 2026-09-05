@@ -55,10 +55,12 @@
 
 .gallery__item {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
   overflow: hidden;
   background: rgba(43, 27, 18, 0.3);
+  border: 1px solid rgba(251, 243, 227, 0.1);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
 }
 
 .gallery__img {

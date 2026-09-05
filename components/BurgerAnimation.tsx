@@ -5,9 +5,9 @@ import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import styles from "./Hero.module.css";
 
 const FRAME_COUNT = 120;
-const FRAME_DIR = "/images/ezgif-77b0809517093d5a-png-split/ezgif-frame-";
-const CANVAS_W = 1080;
-const CANVAS_H = 1920;
+const FRAME_DIR = "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-";
+const CANVAS_W = 1920;
+const CANVAS_H = 1080;
 
 function frameUrl(i: number) {
   return `${FRAME_DIR}${String(i + 1).padStart(3, "0")}.png`;

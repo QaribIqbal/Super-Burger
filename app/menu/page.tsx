@@ -53,20 +53,20 @@ export default function Menu() {
                 fontFamily: "Work Sans, sans-serif",
                 fontSize: "0.875rem",
                 fontWeight: 500,
-                color: selectedCategory === null ? "#2B1B12" : "rgb(170, 77, 51)",
+                color: selectedCategory === null ? "#2B1B12" : "#B75A39",
                 padding: "0.5rem 1rem",
                 borderRadius: "9999px",
-                border: selectedCategory === null ? "1px solid rgb(170, 77, 51)" : "none",
+                border: selectedCategory === null ? "1px solid #B75A39" : "none",
                 background: selectedCategory === null ? "transparent" : "#EEDABF",
                 ...(selectedCategory === null && {
                   color: "#2B1B12",
-                  borderColor: "rgb(170, 77, 51)",
+                  borderColor: "#B75A39",
                   background: "transparent",
                 }),
                 ...(selectedCategory !== null && {
                   color: "#FBF3E3",
-                  borderColor: "rgb(170, 77, 51)",
-                  background: "rgb(170, 77, 51)",
+                  borderColor: "#B75A39",
+                  background: "#B75A39",
                 }),
                 transition: "all 150ms ease",
                 cursor: "pointer",
@@ -91,15 +91,15 @@ export default function Menu() {
                   padding: "0.5rem 1rem",
                   borderRadius: "9999px",
                   border: selectedCategory === category.id
-                    ? "1px solid rgb(170, 77, 51)"
+                    ? "1px solid #B75A39"
                     : "1px solid transparent",
                   background: selectedCategory === category.id
-                    ? "rgb(170, 77, 51)"
+                    ? "#B75A39"
                     : "transparent",
                   ...(selectedCategory === category.id && {
                     color: "#FBF3E3",
-                    borderColor: "rgb(170, 77, 51)",
-                    background: "rgb(170, 77, 51)",
+                    borderColor: "#B75A39",
+                    background: "#B75A39",
                   }),
                   ...(selectedCategory !== category.id && {
                     color: "#2B1B12",
@@ -128,7 +128,7 @@ export default function Menu() {
                 color: "#2B1B12",
                 padding: "0.25rem 0.5rem",
                 borderRadius: "9999px",
-                border: "1px solid rgb(170, 77, 51)",
+                border: "1px solid #B75A39",
                 background: "transparent",
                 transition: "all 150ms ease",
                 cursor: "pointer",
@@ -148,7 +148,7 @@ export default function Menu() {
                 color: "#2B1B12",
                 padding: "0.25rem 0.5rem",
                 borderRadius: "9999px",
-                border: "1px solid rgb(170, 77, 51)",
+                border: "1px solid #B75A39",
                 background: "transparent",
                 transition: "all 150ms ease",
                 cursor: "pointer",
@@ -168,7 +168,7 @@ export default function Menu() {
                 color: "#2B1B12",
                 padding: "0.25rem 0.5rem",
                 borderRadius: "9999px",
-                border: "1px solid rgb(170, 77, 51)",
+                border: "1px solid #B75A39",
                 background: "transparent",
                 transition: "all 150ms ease",
                 cursor: "pointer",
@@ -195,7 +195,7 @@ export default function Menu() {
                 transition: "transform 150ms ease, box-shadow 150ms ease",
               }}
             >
-              <div style={{ position: "relative", aspectRatio: "4 / 3", background: "rgb(170, 77, 51)" }}>
+              <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#B75A39" }}>
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -242,7 +242,7 @@ export default function Menu() {
                             letterSpacing: "0.05em",
                             padding: "0.25rem 0.5rem",
                             borderRadius: "9999px",
-                            background: "rgb(170, 77, 51)",
+                            background: "#B75A39",
                             color: "#FBF3E3",
                           }}
                         >
@@ -291,7 +291,7 @@ export default function Menu() {
                     return null;
                   })}
                 </div>
-                <div style={{ fontFamily: "'Archivo Black', sans-serif", fontSize: "1rem", color: "rgb(170, 77, 51)" }}>
+                <div style={{ fontFamily: "'Archivo Black', sans-serif", fontSize: "1rem", color: "#B75A39" }}>
                   ${item.price.toFixed(2)}
                 </div>
               </div>

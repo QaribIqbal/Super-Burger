@@ -51,7 +51,7 @@ export default function USP() {
               width: 48,
               height: 48,
               borderRadius: "9999px",
-              background: "rgb(170, 77, 51)",
+              background: "#B75A39",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

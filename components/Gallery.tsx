@@ -14,7 +14,7 @@ export default function Gallery() {
         <div className={styles.gallery__grid}>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/burger-assembled.jpg"
+              src="/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-120.png"
               alt="Classic cheeseburger with lettuce, tomato, and pickles on sesame bun"
               fill
               priority={false}
@@ -24,7 +24,7 @@ export default function Gallery() {
           </article>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/burger-spicy-crispy.jpg"
+              src="/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-090.png"
               alt="Spicy crispy chicken burger with slaw and chipotle mayo"
               fill
               priority={false}
@@ -34,7 +34,7 @@ export default function Gallery() {
           </article>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/fries-closeup.jpg"
+              src="/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-060.png"
               alt="Golden crinkle-cut fries with sea salt in a metal basket"
               fill
               priority={false}
@@ -44,7 +44,7 @@ export default function Gallery() {
           </article>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/malt-shake.jpg"
+              src="/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-030.png"
               alt="Thick chocolate malt shake with whipped cream and cherry"
               fill
               priority={false}

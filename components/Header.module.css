@@ -39,7 +39,7 @@
   font-family: "Caveat", sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
-  color: rgb(170, 77, 51);
+  color: #B75A39;
 }
 
 .logo__bold {
@@ -80,7 +80,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: rgb(170, 77, 51);
+  background: #B75A39;
   transition: width 250ms ease;
 }
 
@@ -98,7 +98,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   color: #FBF3E3;
-  background: rgb(170, 77, 51);
+  background: #B75A39;
   border-radius: 9999px;
   text-decoration: none;
   transition: background 150ms ease;

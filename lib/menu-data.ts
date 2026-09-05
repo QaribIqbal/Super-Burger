@@ -15,7 +15,7 @@ export const menuItems: MenuItem[] = [
     description: "Two smashed patties, American cheese, grilled onions, pickles, house sauce on a toasted sesame bun",
     price: 14.5,
     category: "burgers",
-    image: "/images/burger-double-smash.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-120.png",
     tags: ["popular"],
   },
   {
@@ -24,7 +24,7 @@ export const menuItems: MenuItem[] = [
     description: "Buttermilk-brined crispy chicken, spicy slaw, pickles, chipotle mayo on a brioche bun",
     price: 13.5,
     category: "burgers",
-    image: "/images/burger-spicy-crispy.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-090.png",
     tags: ["spicy"],
   },
   {
@@ -33,7 +33,7 @@ export const menuItems: MenuItem[] = [
     description: "Grilled portobello, roasted red pepper, arugula, goat cheese, basil aioli on a whole wheat bun",
     price: 12.5,
     category: "burgers",
-    image: "/images/burger-veggie.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-100.png",
     tags: ["veg"],
   },
   {
@@ -42,7 +42,7 @@ export const menuItems: MenuItem[] = [
     description: "Smashed patty, aged cheddar, thick-cut bacon, caramelized onions, smoky BBQ sauce",
     price: 15.5,
     category: "burgers",
-    image: "/images/burger-bacon-cheddar.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-110.png",
     tags: ["popular"],
   },
   {
@@ -51,7 +51,7 @@ export const menuItems: MenuItem[] = [
     description: "Golden crinkle-cut fries with sea salt, served with house ketchup",
     price: 4.5,
     category: "sides",
-    image: "/images/side-fries.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-060.png",
     tags: ["veg"],
   },
   {
@@ -60,7 +60,7 @@ export const menuItems: MenuItem[] = [
     description: "Thick-cut onions in crisp beer batter, served with ranch",
     price: 5.5,
     category: "sides",
-    image: "/images/side-onion-rings.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-045.png",
     tags: ["veg"],
   },
   {
@@ -69,7 +69,7 @@ export const menuItems: MenuItem[] = [
     description: "Wisconsin white cheddar curds, lightly breaded, served with marinara",
     price: 6.5,
     category: "sides",
-    image: "/images/side-cheese-curds.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-075.png",
     tags: ["veg", "popular"],
   },
   {
@@ -78,7 +78,7 @@ export const menuItems: MenuItem[] = [
     description: "Rich chocolate ice cream, malt powder, whipped cream, cherry",
     price: 6.5,
     category: "drinks",
-    image: "/images/drink-chocolate-shake.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-030.png",
     tags: ["veg"],
   },
   {
@@ -87,7 +87,7 @@ export const menuItems: MenuItem[] = [
     description: "Madagascar vanilla ice cream, whole milk, whipped cream",
     price: 6.0,
     category: "drinks",
-    image: "/images/drink-vanilla-shake.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-015.png",
     tags: ["veg"],
   },
   {
@@ -96,7 +96,7 @@ export const menuItems: MenuItem[] = [
     description: "Steeped 18 hours, served on tap, creamy cascade",
     price: 4.5,
     category: "drinks",
-    image: "/images/drink-cold-brew.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-020.png",
     tags: ["veg"],
   },
   {
@@ -105,7 +105,7 @@ export const menuItems: MenuItem[] = [
     description: "Double Smash Burger, crinkle fries, fountain drink",
     price: 18.5,
     category: "combos",
-    image: "/images/combo-classic.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-120.png",
     tags: ["popular"],
   },
   {
@@ -114,7 +114,7 @@ export const menuItems: MenuItem[] = [
     description: "Spicy Crispy Chicken, onion rings, chocolate shake",
     price: 22.0,
     category: "combos",
-    image: "/images/combo-spicy.jpg",
+    image: "/images/ezgif-3feb34ce369c0564-png-split/ezgif-frame-090.png",
     tags: ["spicy"],
   },
 ];

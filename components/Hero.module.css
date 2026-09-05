@@ -45,12 +45,7 @@
 
 .background::after {
   right: 0;
-  background: radial-gradient(
-    ellipse 85% 78% at 50% 62%,
-    rgb(186, 93, 61) 0%,
-    rgb(180, 87, 55) 42%,
-    rgb(170, 77, 51) 100%
-  );
+  background: linear-gradient(180deg, #AB5235 0%, #AF5639 50%, #B55632 100%);
 }
 
 /* ─── Ghost "BURGER" Wordmark ───────────────────────────────────────────────── */
@@ -108,27 +103,21 @@
 /* The actual <canvas> element */
 .canvas {
   /*
-   * Desktop: scale by height — canvas fills viewport height,
-   * width is determined by aspect-ratio: 9/16.
-   * Mobile: when the portrait canvas would be wider than viewport,
-   * scale by width instead.
+   * Landscape source frames: fill the available width while preserving 16:9.
+   * The split background behind the canvas fills any remaining viewport height.
    */
-  height: 100vh;
-  width: auto;
-  aspect-ratio: 9 / 16;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: auto;
+  max-height: 100vh;
+  aspect-ratio: 16 / 9;
   display: block;
+  mix-blend-mode: normal;
   will-change: transform;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
 
-/* On small viewports where height×(9/16) > vw, switch to width-based scaling */
-@media (max-aspect-ratio: 9/16) {
-  .canvas {
-    width: 100vw;
-    height: auto;
-  }
-}
+
 
 /* ─── Copy Layer ────────────────────────────────────────────────────────────── */
 

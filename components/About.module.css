@@ -21,10 +21,12 @@
 
 .about__visual {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--color-rust);
+  border: 1px solid rgba(43, 27, 18, 0.1);
+  box-shadow: 0 18px 42px rgba(43, 27, 18, 0.14);
 }
 
 .about__img {
