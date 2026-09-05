@@ -1,7 +1,7 @@
 .section { position: relative; height: 400vh; background: var(--color-cream); }
 .sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; isolation: isolate; background: linear-gradient(100deg, var(--color-cream) 0 50%, var(--color-rust) 50%); }
-.sticky :global(.canvasWrap) { top: calc(var(--header-height) + clamp(.75rem, 2.5vh, 2rem)); bottom: 0; }
-.sticky :global(.canvas) { width: min(100vw, calc((100vh - var(--header-height) - clamp(.75rem, 2.5vh, 2rem)) * 16 / 9)); max-height: calc(100vh - var(--header-height) - clamp(.75rem, 2.5vh, 2rem)); }
+.sticky :global(.canvasWrap) { top: calc(var(--header-height) + clamp(2.5rem, 6vh, 4.5rem)); bottom: 0; }
+.sticky :global(.canvas) { width: min(100vw, calc((100vh - var(--header-height) - clamp(2.5rem, 6vh, 4.5rem)) * 16 / 9)); max-height: calc(100vh - var(--header-height) - clamp(2.5rem, 6vh, 4.5rem)); }
 .heading { position: absolute; z-index: 4; top: clamp(5rem, 12vh, 8rem); left: clamp(1.5rem, 7vw, 7rem); max-width: 25rem; }
 .eyebrow { display: block; margin-bottom: .35rem; color: var(--color-rust); font-family: var(--font-caveat), cursive; font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; }
 .heading h2 { color: var(--color-ink); font-family: var(--font-archivo-black), sans-serif; font-size: clamp(2rem, 4vw, 4rem); line-height: .96; text-transform: uppercase; }
