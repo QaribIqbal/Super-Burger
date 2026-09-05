@@ -4,24 +4,24 @@ import * as React from "react";
 import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import styles from "./Hero.module.css";
 
-const FRAME_COUNT = 119;
-const FRAME_DIR = "/images/ezgif-48495279d47d4928-png-split/ezgif-frame-";
-const CANVAS_W = 1920;
-const CANVAS_H = 1080;
-
-function frameUrl(i: number) {
-  return `${FRAME_DIR}${String(i + 1).padStart(3, "0")}.png`;
-}
+const DEFAULT_FRAME_COUNT = 299;
+const DEFAULT_FRAME_DIR = "/images/burger-build/frame-";
+const DEFAULT_CANVAS_W = 2560;
+const DEFAULT_CANVAS_H = 1440;
 
 interface BurgerAnimationProps {
   /** 0–1 scroll progress from the parent ScrollySection */
   scrollProgress: number;
   onLoadProgress?: (loaded: number, total: number) => void;
   onReady?: () => void;
+  frameCount?: number;
+  frameDir?: string;
+  canvasWidth?: number;
+  canvasHeight?: number;
 }
 
 const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
-  ({ scrollProgress, onLoadProgress, onReady }, ref) => {
+  ({ scrollProgress, onLoadProgress, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     // Forward the ref so parent can measure it if needed
     useImperativeHandle(ref, () => canvasRef.current as HTMLCanvasElement);
@@ -35,14 +35,14 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
 
     /* ── Pre-load all frames ─────────────────────────────────────────────── */
     useEffect(() => {
-      const frames: HTMLImageElement[] = new Array(FRAME_COUNT);
+      const frames: HTMLImageElement[] = new Array(frameCount);
       loadedRef.current = 0;
       readyRef.current = false;
 
       const finish = () => {
         loadedRef.current += 1;
-        onLoadProgress?.(loadedRef.current, FRAME_COUNT);
-        if (loadedRef.current === FRAME_COUNT) {
+        onLoadProgress?.(loadedRef.current, frameCount);
+        if (loadedRef.current === frameCount) {
           readyRef.current = true;
           onReady?.();
           // Draw the first frame immediately so there's no blank canvas
@@ -50,12 +50,15 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
         }
       };
 
-      for (let i = 0; i < FRAME_COUNT; i++) {
+      for (let i = 0; i < frameCount; i++) {
         const img = new Image();
         img.decoding = "async";
-        img.onload = finish;
+        img.onload = () => {
+          if (i === 0) drawFrame(0);
+          finish();
+        };
         img.onerror = finish; // count errors so we don't get stuck
-        img.src = frameUrl(i);
+        img.src = `${frameDir}${String(i + 1).padStart(3, "0")}.png`;
         frames[i] = img;
       }
 
@@ -67,20 +70,21 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
           img.onerror = null;
         });
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // The callbacks and frame source are intentionally captured once for the lifetime of the preload.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     /* ── Draw helper ─────────────────────────────────────────────────────── */
     function drawFrame(index: number) {
       const canvas = canvasRef.current;
-      const img = framesRef.current[index];
+      const img = framesRef.current[index] || framesRef.current[0];
       if (!canvas || !img?.complete || img.naturalWidth === 0) return;
 
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-      ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
       currentFrameRef.current = index;
     }
 
@@ -94,14 +98,13 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
       }
       rafRef.current = requestAnimationFrame(loop);
       return () => cancelAnimationFrame(rafRef.current);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     /* ── Respond to scrollProgress prop ─────────────────────────────────── */
     useEffect(() => {
       const clamped = Math.max(0, Math.min(1, scrollProgress));
-      // Map 0–1 to frame index 0–(FRAME_COUNT-1), with smooth interpolation
-      const rawIndex = clamped * (FRAME_COUNT - 1);
+      // Map 0–1 to frame index 0–(frameCount-1), with smooth interpolation
+      const rawIndex = clamped * (frameCount - 1);
       targetFrameRef.current = Math.round(rawIndex);
     }, [scrollProgress]);
 
@@ -110,8 +113,8 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
         <canvas
           ref={canvasRef}
           className={styles.canvas}
-          width={CANVAS_W}
-          height={CANVAS_H}
+          width={canvasWidth}
+          height={canvasHeight}
           aria-hidden="true"
           role="presentation"
         />
