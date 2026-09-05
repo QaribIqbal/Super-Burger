@@ -7,6 +7,7 @@
 .heading h2 { color: var(--color-ink); font-family: var(--font-archivo-black), sans-serif; font-size: clamp(2rem, 4vw, 4rem); line-height: .96; text-transform: uppercase; }
 .heading p { max-width: 22rem; margin-top: 1rem; color: rgba(43, 27, 18, .68); font-size: 1rem; line-height: 1.5; }
 .callout { position: absolute; z-index: 5; top: 52%; opacity: 0; transition: opacity .35s ease, transform .35s ease; }
+.freshToppings { top: 43%; }
 .callout.left { left: clamp(1.5rem, 8vw, 9rem); transform: translateX(-1rem); }
 .callout.right { right: clamp(1.5rem, 8vw, 9rem); transform: translateX(1rem); }
 .callout.visible { opacity: 1; transform: translateX(0); }
@@ -18,4 +19,4 @@
 .progress div { width: 5rem; height: 2px; overflow: hidden; background: rgba(251,243,227,.35); }
 .progress i { display: block; height: 100%; transform-origin: left; background: var(--color-accent-gold); }
 .hint { position: absolute; z-index: 5; left: 50%; bottom: 2.5rem; transform: translateX(-50%); color: rgba(43,27,18,.58); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
-@media (max-width: 700px) { .heading { top: 5.5rem; left: 1.25rem; right: 1.25rem; max-width: 19rem; } .heading h2 { font-size: clamp(1.75rem, 9vw, 2.7rem); } .heading p { font-size: .9rem; } .callout { top: auto; bottom: 18%; } .callout.left { left: 1.25rem; } .callout.right { right: 1.25rem; } .callout::after { display: none; } .callout span { font-size: .65rem; } .hint { display: none; } }
+@media (max-width: 700px) { .heading { top: 5.5rem; left: 1.25rem; right: 1.25rem; max-width: 19rem; } .heading h2 { font-size: clamp(1.75rem, 9vw, 2.7rem); } .heading p { font-size: .9rem; } .callout { top: auto; bottom: 18%; } .freshToppings { top: auto; bottom: 30%; } .callout.left { left: 1.25rem; } .callout.right { right: 1.25rem; } .callout::after { display: none; } .callout span { font-size: .65rem; } .hint { display: none; } }
