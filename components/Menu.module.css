@@ -1,0 +1,61 @@
+/* Menu page grid — used by app/menu/page.tsx and the original app/page.tsx */
+
+.menuGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.menuCard {
+  background: var(--color-cream-text);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.menuCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.menuCard__image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-rust);
+}
+
+.menuCard__body {
+  padding: var(--space-md);
+}
+
+.menuCard__name {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: var(--text-base);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  margin-bottom: 0.25rem;
+}
+
+.menuCard__desc {
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-ink);
+  opacity: 0.7;
+  margin-bottom: var(--space-sm);
+}
+
+.menuCard__tags {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-sm);
+}
+
+.menuCard__price {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: var(--text-base);
+  color: var(--color-rust);
+}

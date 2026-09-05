@@ -1,0 +1,118 @@
+.gallery {
+  padding: var(--space-4xl) var(--space-xl);
+  background: var(--color-cream);
+}
+
+.gallery__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.gallery__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3xl);
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.gallery__title {
+  font-family: var(--font-headline);
+  font-size: var(--text-2xl);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.gallery__viewAll {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-rust);
+  border-bottom: 2px solid var(--color-rust);
+  padding-bottom: 2px;
+  transition: opacity var(--transition-fast);
+}
+
+.gallery__viewAll:hover {
+  opacity: 0.7;
+}
+
+.gallery__grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.gallery__grid--desktop {
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.gallery__grid--mobile {
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+.gallery__item {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-rust);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.gallery__item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery__quote {
+  position: absolute;
+  bottom: var(--space-md);
+  left: var(--space-md);
+  background: var(--color-cream-text);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-ink);
+  opacity: 0.8;
+  max-width: 80%;
+}
+
+@media (max-width: 1024px) {
+  .gallery {
+    padding: var(--space-3xl) var(--space-lg);
+  }
+
+  .gallery__grid--desktop {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery {
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  .gallery__grid--desktop,
+  .gallery__grid--mobile {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+}

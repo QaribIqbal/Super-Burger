@@ -1,0 +1,164 @@
+.signature {
+  padding: var(--space-4xl) 0;
+  background: var(--color-cream-text);
+  overflow: hidden;
+}
+
+.signature__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 6vw, 6.25rem);
+}
+
+.signature__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-2xl);
+}
+
+.signature__title {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.signature__viewAll {
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-rust);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.signature__viewAll:hover {
+  color: var(--color-rust-dark);
+}
+
+.signature__scroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.signature__card {
+  background: var(--color-cream);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.signature__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.signature__image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-rust);
+  overflow: hidden;
+}
+
+.signature__img {
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.signature__card:hover .signature__img {
+  transform: scale(1.04);
+}
+
+.signature__tag {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  z-index: 1;
+}
+
+.signature__tag--popular {
+  background: var(--color-accent-gold);
+  color: var(--color-ink);
+}
+
+.signature__tag--spicy {
+  background: var(--color-rust);
+  color: var(--color-cream-text);
+}
+
+.signature__tag--veg {
+  background: var(--color-ink);
+  color: var(--color-cream-text);
+}
+
+.signature__content {
+  padding: var(--space-md);
+}
+
+.signature__name {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: var(--text-base);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
+}
+
+.signature__description {
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: rgba(43, 27, 18, 0.65);
+  margin-bottom: var(--space-md);
+}
+
+.signature__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.signature__price {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: var(--text-lg);
+  color: var(--color-rust);
+}
+
+.signature__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: color var(--transition-fast), gap var(--transition-fast);
+}
+
+.signature__link svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--transition-fast);
+}
+
+.signature__link:hover {
+  color: var(--color-rust);
+}
+
+.signature__link:hover svg {
+  transform: translateX(3px);
+}

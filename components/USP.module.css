@@ -1,0 +1,127 @@
+.usp {
+  padding: 4rem 1rem;
+  background: var(--color-cream);
+}
+
+.usp__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.usp__header {
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.usp__title {
+  font-family: "Archivo Black", sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #2B1B12;
+}
+
+.usp__subtitle {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.875rem;
+  color: #2B1B12;
+  opacity: 0.6;
+}
+
+.usp__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.usp__card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: var(--color-cream-text);
+  transition: transform 250ms ease, box-shadow 250ms ease;
+  cursor: pointer;
+}
+
+.usp__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(43, 27, 18, 0.16);
+}
+
+.usp__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.usp__icon--fire {
+  background: rgb(170, 77, 51);
+  color: #FBF3E3;
+}
+
+.usp__icon--clock {
+  background: #F2A93B;
+  color: #2B1B12;
+}
+
+.usp__icon--leaf {
+  background: #2B1B12;
+  color: #FBF3E3;
+}
+
+.usp__icon svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.usp__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.usp__label {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2B1B12;
+  margin-bottom: 0.25rem;
+}
+
+.usp__desc {
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #2B1B12;
+  opacity: 0.7;
+}
+
+@media (max-width: 1024px) {
+  .usp__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .usp {
+    padding: 2rem 1rem;
+  }
+
+  .usp__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

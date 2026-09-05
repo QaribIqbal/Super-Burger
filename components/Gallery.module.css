@@ -1,0 +1,103 @@
+.gallery {
+  padding: var(--space-4xl) 0;
+  background: var(--color-ink);
+  color: var(--color-cream-text);
+}
+
+.gallery__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 6vw, 6.25rem);
+}
+
+.gallery__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-2xl);
+}
+
+.gallery__title {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--color-cream-text);
+}
+
+.gallery__viewAll {
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-accent-gold);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.gallery__viewAll:hover {
+  color: var(--color-cream-text);
+}
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-3xl);
+}
+
+@media (min-width: 768px) {
+  .gallery__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.gallery__item {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgba(43, 27, 18, 0.3);
+}
+
+.gallery__img {
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.gallery__item:hover .gallery__img {
+  transform: scale(1.06);
+}
+
+.gallery__socialProof {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-lg);
+}
+
+.gallery__quote {
+  background: rgba(251, 243, 227, 0.04);
+  border-left: 3px solid var(--color-rust);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.gallery__quote p {
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-cream-text);
+  margin-bottom: var(--space-sm);
+  font-style: italic;
+}
+
+.gallery__quote cite {
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-gold);
+  font-style: normal;
+}
