@@ -340,12 +340,36 @@
     var(--color-cream) 50%,
     var(--color-rust) 50%
   );
-  transition: opacity 0.4s ease;
+  transition: opacity 0.55s ease, visibility 0.55s ease;
 }
 
 .loader--hidden {
   opacity: 0;
   pointer-events: none;
+  visibility: hidden;
+}
+
+.loaderBrand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-bottom: 2.25rem;
+  color: var(--color-ink);
+}
+
+.loaderBrandScript {
+  color: var(--color-rust);
+  font-family: var(--font-caveat), cursive;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.loaderBrandBold {
+  font-family: var(--font-archivo-black), sans-serif;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .loaderBar {
@@ -354,7 +378,7 @@
   background: rgba(43, 27, 18, 0.15);
   border-radius: 999px;
   overflow: hidden;
-  margin-top: var(--space-md);
+  margin-top: 0.9rem;
 }
 
 .loaderFill {
@@ -368,9 +392,18 @@
   font-family: var(--font-work-sans), "Work Sans", sans-serif;
   font-size: var(--text-xs);
   font-weight: 500;
-  color: rgba(43, 27, 18, 0.5);
+  color: rgba(43, 27, 18, 0.62);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.loaderProgress {
+  margin-top: 0.65rem;
+  color: rgba(43, 27, 18, 0.45);
+  font-family: var(--font-work-sans), sans-serif;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
 }
 
 /* ─── Scroll-down hint (Beat 1) ─────────────────────────────────────────────── */

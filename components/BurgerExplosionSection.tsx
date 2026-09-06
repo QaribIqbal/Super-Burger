@@ -49,6 +49,7 @@ export default function BurgerExplosionSection() {
           frameDir="/images/burger-explosion/ezgif-frame-"
           canvasWidth={1920}
           canvasHeight={1080}
+          loadWhenVisible
         />
 
         {CALLOUTS.map((callout) => {

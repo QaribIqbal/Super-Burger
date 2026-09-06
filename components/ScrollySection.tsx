@@ -7,6 +7,7 @@ import ScrollyCopy from "./ScrollyCopy";
 import styles from "./Hero.module.css";
 
 const TRACK_HEIGHT_VH = 400;
+const HERO_FRAME_COUNT = 299;
 
 export default function ScrollySection() {
   const trackRef = useRef<HTMLElement>(null);
@@ -38,7 +39,7 @@ export default function ScrollySection() {
   }, [handleScroll]);
 
   /* ── Loader ──────────────────────────────────────────────────────────── */
-  const loadPercent = Math.round((loadedFrames / 119) * 100);
+  const loadPercent = Math.round((loadedFrames / HERO_FRAME_COUNT) * 100);
   const firstFrameReady = loadedFrames > 0;
 
   /* ── Ghost text visibility (only during beat 1) ──────────────────────── */
@@ -89,13 +90,18 @@ export default function ScrollySection() {
           role="status"
           aria-label={`Loading burger: ${loadPercent}%`}
         >
-          <span className={styles.loaderLabel}>Loading&hellip;</span>
+          <div className={styles.loaderBrand} aria-hidden="true">
+            <span className={styles.loaderBrandScript}>Super</span>
+            <span className={styles.loaderBrandBold}>Burger Co.</span>
+          </div>
+          <span className={styles.loaderLabel}>Preparing your first bite</span>
           <div className={styles.loaderBar}>
             <div
               className={styles.loaderFill}
               style={{ width: `${loadPercent}%` }}
             />
           </div>
+          <span className={styles.loaderProgress}>{loadPercent}%</span>
         </div>
 
         {/* ── Copywriting panels (5 beats) ──────────────────────────────── */}
