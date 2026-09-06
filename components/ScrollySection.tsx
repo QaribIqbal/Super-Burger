@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRef, useState, useEffect, useCallback } from "react";
 import BurgerAnimation from "./BurgerAnimation";
 import ScrollyCopy from "./ScrollyCopy";
+import { getHeroLoaderState } from "@/lib/heroLoader.mjs";
 import styles from "./Hero.module.css";
 
 const TRACK_HEIGHT_VH = 400;
@@ -14,6 +15,7 @@ export default function ScrollySection() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [loadedFrames, setLoadedFrames] = useState(0);
   const [firstFrameReady, setFirstFrameReady] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
 
   /* ── Scroll → progress mapping ──────────────────────────────────────── */
   const handleScroll = useCallback(() => {
@@ -39,8 +41,17 @@ export default function ScrollySection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
+  useEffect(() => {
+    if (heroReady) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [heroReady]);
+
   /* ── Loader ──────────────────────────────────────────────────────────── */
-  const loadPercent = Math.round((loadedFrames / HERO_FRAME_COUNT) * 100);
+  const loaderState = getHeroLoaderState(loadedFrames, HERO_FRAME_COUNT, heroReady);
   /* ── Ghost text visibility (only during beat 1) ──────────────────────── */
   const showGhost = scrollProgress < 0.2;
 
@@ -76,32 +87,35 @@ export default function ScrollySection() {
           scrollProgress={scrollProgress}
           onLoadProgress={(loaded) => setLoadedFrames(loaded)}
           onFirstFrameReady={() => setFirstFrameReady(true)}
+          onReady={() => setHeroReady(true)}
+          preloadAll
         />
 
         {/* ── Loading overlay ───────────────────────────────────────────── */}
         <div
           className={[
             styles.loader,
-            firstFrameReady ? styles["loader--hidden"] : "",
+            loaderState.visible ? "" : styles["loader--hidden"],
           ]
             .filter(Boolean)
             .join(" ")}
-          aria-hidden={firstFrameReady}
+          aria-hidden={!loaderState.visible}
           role="status"
-          aria-label={`Loading burger: ${loadPercent}%`}
+          aria-label={`${loaderState.label}: ${loaderState.percent}%`}
         >
           <div className={styles.loaderBrand} aria-hidden="true">
             <span className={styles.loaderBrandScript}>Super</span>
             <span className={styles.loaderBrandBold}>Burger Co.</span>
           </div>
-          <span className={styles.loaderLabel}>Preparing your first bite</span>
+          <span className={styles.loaderLabel}>{loaderState.label}</span>
+          <span className={styles.loaderSubtext}>Loading every layer for a smooth scroll</span>
           <div className={styles.loaderBar}>
             <div
               className={styles.loaderFill}
-              style={{ width: `${loadPercent}%` }}
+              style={{ width: `${loaderState.percent}%` }}
             />
           </div>
-          <span className={styles.loaderProgress}>{loadPercent}%</span>
+          <span className={styles.loaderProgress}>{loaderState.percent}%</span>
         </div>
 
         {/* ── Copywriting panels (5 beats) ──────────────────────────────── */}

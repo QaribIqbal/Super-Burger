@@ -335,6 +335,7 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
+  text-align: center;
   background: linear-gradient(
     to right,
     var(--color-cream) 50%,
@@ -373,8 +374,8 @@
 }
 
 .loaderBar {
-  width: clamp(160px, 30vw, 260px);
-  height: 3px;
+  width: clamp(240px, 36vw, 420px);
+  height: 8px;
   background: rgba(43, 27, 18, 0.15);
   border-radius: 999px;
   overflow: hidden;
@@ -395,6 +396,13 @@
   color: rgba(43, 27, 18, 0.62);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.loaderSubtext {
+  margin-top: .6rem;
+  color: rgba(43, 27, 18, .48);
+  font-family: var(--font-work-sans), sans-serif;
+  font-size: .78rem;
 }
 
 .loaderProgress {

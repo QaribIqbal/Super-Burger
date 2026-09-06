@@ -30,11 +30,12 @@ interface BurgerAnimationProps {
   canvasWidth?: number;
   canvasHeight?: number;
   loadWhenVisible?: boolean;
+  preloadAll?: boolean;
   assetVersion?: string;
 }
 
 const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
-  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, assetVersion = FRAME_ASSET_VERSION }, ref) => {
+  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, preloadAll = false, assetVersion = FRAME_ASSET_VERSION }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     // Forward the ref so parent can measure it if needed
@@ -73,6 +74,7 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
       const frames: HTMLImageElement[] = new Array(frameCount);
       framesRef.current = frames;
       const statuses: FrameStatus[] = new Array(frameCount).fill("idle");
+      const retryCounts = new Array(frameCount).fill(0);
       loadedRef.current = 0;
       statusRef.current = statuses;
       queueRef.current = [];
@@ -113,10 +115,14 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
             pump();
           };
           img.onerror = () => {
-            statuses[index] = "error";
             activeLoadsRef.current -= 1;
-            loadedRef.current += 1;
-            onLoadProgress?.(loadedRef.current, frameCount);
+            if (retryCounts[index] < 2) {
+              retryCounts[index] += 1;
+              statuses[index] = "queued";
+              queueRef.current.push(index);
+            } else {
+              statuses[index] = "error";
+            }
             pump();
           };
           img.src = buildFrameAssetUrl(frameDir, index, assetVersion);
@@ -133,11 +139,15 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
         for (let index = 0; index < Math.min(8, frameCount); index += 1) enqueue(index, index === 0);
         pump();
 
-        // Load a sparse set of keyframes for useful coverage. Exact frames are
-        // fetched on demand as the visitor scrolls instead of downloading the
-        // entire 500+ MB sequence at startup.
+        // The hero can opt into a complete preload so the loader can guarantee
+        // every scroll frame is ready before it hands control to the visitor.
         loadTimeoutRef.current = setTimeout(() => {
-          for (const index of createSparseFrameOrder(frameCount, KEYFRAME_STRIDE)) enqueue(index);
+          if (preloadAll) {
+            for (let index = 8; index < frameCount; index += 1) enqueue(index);
+          } else {
+            // Lower sections stay lazy: exact frames are fetched on demand.
+            for (const index of createSparseFrameOrder(frameCount, KEYFRAME_STRIDE)) enqueue(index);
+          }
           pump();
         }, 250);
       };
