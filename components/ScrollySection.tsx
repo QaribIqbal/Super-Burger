@@ -13,6 +13,7 @@ export default function ScrollySection() {
   const trackRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [loadedFrames, setLoadedFrames] = useState(0);
+  const [firstFrameReady, setFirstFrameReady] = useState(false);
 
   /* ── Scroll → progress mapping ──────────────────────────────────────── */
   const handleScroll = useCallback(() => {
@@ -40,8 +41,6 @@ export default function ScrollySection() {
 
   /* ── Loader ──────────────────────────────────────────────────────────── */
   const loadPercent = Math.round((loadedFrames / HERO_FRAME_COUNT) * 100);
-  const firstFrameReady = loadedFrames > 0;
-
   /* ── Ghost text visibility (only during beat 1) ──────────────────────── */
   const showGhost = scrollProgress < 0.2;
 
@@ -76,6 +75,7 @@ export default function ScrollySection() {
         <BurgerAnimation
           scrollProgress={scrollProgress}
           onLoadProgress={(loaded) => setLoadedFrames(loaded)}
+          onFirstFrameReady={() => setFirstFrameReady(true)}
         />
 
         {/* ── Loading overlay ───────────────────────────────────────────── */}

@@ -13,6 +13,7 @@ interface BurgerAnimationProps {
   /** 0–1 scroll progress from the parent ScrollySection */
   scrollProgress: number;
   onLoadProgress?: (loaded: number, total: number) => void;
+  onFirstFrameReady?: () => void;
   onReady?: () => void;
   frameCount?: number;
   frameDir?: string;
@@ -22,7 +23,7 @@ interface BurgerAnimationProps {
 }
 
 const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
-  ({ scrollProgress, onLoadProgress, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false }, ref) => {
+  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     // Forward the ref so parent can measure it if needed
@@ -46,7 +47,7 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
       const frames = framesRef.current;
       const img = frames[index]?.complete && frames[index]?.naturalWidth
         ? frames[index]
-        : frames.find((candidate) => candidate.complete && candidate.naturalWidth > 0);
+        : frames.find((candidate) => candidate?.complete && candidate.naturalWidth > 0);
       if (!canvas || !img) return;
 
       const ctx = canvas.getContext("2d");
@@ -60,6 +61,7 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
     /* ── Progressive frame loader ─────────────────────────────────────────── */
     useEffect(() => {
       const frames: HTMLImageElement[] = new Array(frameCount);
+      framesRef.current = frames;
       const statuses: Array<"idle" | "loading" | "loaded" | "error"> = new Array(frameCount).fill("idle");
       loadedRef.current = 0;
       statusRef.current = statuses;
@@ -88,7 +90,12 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
             activeLoadsRef.current -= 1;
             loadedRef.current += 1;
             onLoadProgress?.(loadedRef.current, frameCount);
-            if (index === 0 || targetFrameRef.current === index) drawFrame(index);
+            if (index === 0) {
+              drawFrame(0);
+              onFirstFrameReady?.();
+            } else if (targetFrameRef.current === index) {
+              drawFrame(index);
+            }
             if (loadedRef.current === frameCount) onReady?.();
             pump();
           };
@@ -144,7 +151,6 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
         };
       }
 
-      framesRef.current = frames;
       start();
 
       return () => {

@@ -47,8 +47,8 @@ export default function BurgerExplosionSection() {
           scrollProgress={progress}
           frameCount={119}
           frameDir="/images/burger-explosion/ezgif-frame-"
-          canvasWidth={1920}
-          canvasHeight={1080}
+          canvasWidth={2560}
+          canvasHeight={1440}
           loadWhenVisible
         />
 
