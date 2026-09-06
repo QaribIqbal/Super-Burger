@@ -6,17 +6,22 @@
 .eyebrow { display: block; margin-bottom: .35rem; color: var(--color-rust); font-family: var(--font-caveat), cursive; font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; }
 .heading h2 { color: var(--color-ink); font-family: var(--font-archivo-black), sans-serif; font-size: clamp(2rem, 4vw, 4rem); line-height: .96; text-transform: uppercase; }
 .heading p { max-width: 22rem; margin-top: 1rem; color: rgba(43, 27, 18, .68); font-size: 1rem; line-height: 1.5; }
-.callout { position: absolute; z-index: 5; top: 52%; opacity: 0; transition: opacity .35s ease, transform .35s ease; }
-.freshToppings { top: 43%; }
+.callout { position: absolute; z-index: 5; opacity: 0; transition: opacity .35s ease, transform .35s ease; }
+.toastedBun { top: 17%; }
+.freshToppings { top: 24%; }
+.agedCheddar { top: 46%; }
+.twoPatties { top: 57%; }
 .callout.left { left: clamp(1.5rem, 8vw, 9rem); transform: translateX(-1rem); }
 .callout.right { right: clamp(1.5rem, 8vw, 9rem); transform: translateX(1rem); }
 .callout.visible { opacity: 1; transform: translateX(0); }
-.callout span { display: block; padding: .6rem 1rem; border-radius: 999px; background: var(--color-ink); color: var(--color-cream); font-family: var(--font-archivo-black), sans-serif; font-size: clamp(.72rem, 1.1vw, .95rem); text-transform: uppercase; letter-spacing: .03em; box-shadow: 0 8px 22px rgba(43,27,18,.18); }
-.callout::after { content: ""; position: absolute; top: 50%; width: clamp(2rem, 5vw, 5rem); border-top: 1px dashed var(--color-ink); }
+.callout span { position: relative; display: block; padding: .28rem .75rem .42rem; border: 1px solid rgba(43,27,18,.16); border-radius: .3rem .65rem .38rem .72rem; background: rgba(251,243,227,.94); color: var(--color-ink); font-family: var(--font-caveat), cursive; font-size: clamp(1.25rem, 2vw, 1.8rem); font-weight: 700; line-height: 1; letter-spacing: .01em; box-shadow: 0 7px 18px rgba(43,27,18,.14); transform: rotate(-2deg); }
+.callout.right span { transform: rotate(1.5deg); }
+.callout span::after { content: ""; position: absolute; left: .6rem; right: .45rem; bottom: .22rem; border-top: 2px solid rgba(181,86,50,.72); transform: rotate(-1deg); }
+.callout::after { content: ""; position: absolute; top: 52%; width: clamp(2rem, 5vw, 5rem); border-top: 2px dashed rgba(43,27,18,.65); transform: rotate(-2deg); }
 .left::after { left: 100%; }
 .right::after { right: 100%; }
 .progress { position: absolute; z-index: 5; right: clamp(1.5rem, 4vw, 4rem); bottom: 2.5rem; display: flex; align-items: center; gap: .65rem; color: var(--color-cream); font-size: .7rem; font-weight: 700; letter-spacing: .1em; }
 .progress div { width: 5rem; height: 2px; overflow: hidden; background: rgba(251,243,227,.35); }
 .progress i { display: block; height: 100%; transform-origin: left; background: var(--color-accent-gold); }
 .hint { position: absolute; z-index: 5; left: 50%; bottom: 2.5rem; transform: translateX(-50%); color: rgba(43,27,18,.58); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
-@media (max-width: 700px) { .heading { top: 5.5rem; left: 1.25rem; right: 1.25rem; max-width: 19rem; } .heading h2 { font-size: clamp(1.75rem, 9vw, 2.7rem); } .heading p { font-size: .9rem; } .callout { top: auto; bottom: 18%; } .freshToppings { top: auto; bottom: 30%; } .callout.left { left: 1.25rem; } .callout.right { right: 1.25rem; } .callout::after { display: none; } .callout span { font-size: .65rem; } .hint { display: none; } }
+@media (max-width: 700px) { .heading { top: 5.5rem; left: 1.25rem; right: 1.25rem; max-width: 19rem; } .heading h2 { font-size: clamp(1.75rem, 9vw, 2.7rem); } .heading p { font-size: .9rem; } .toastedBun { top: 25%; } .freshToppings { top: 37%; } .agedCheddar { top: 53%; } .twoPatties { top: 62%; } .callout.left, .callout.right { right: .75rem; left: auto; } .callout::after { display: none; } .callout span { padding: .2rem .55rem .32rem; font-size: 1.1rem; } .hint { display: none; } }

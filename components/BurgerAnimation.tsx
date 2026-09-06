@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
+import { buildFrameAssetUrl, FRAME_ASSET_VERSION } from "@/lib/frameAssets.mjs";
 import styles from "./Hero.module.css";
 
 const DEFAULT_FRAME_COUNT = 299;
@@ -20,10 +21,11 @@ interface BurgerAnimationProps {
   canvasWidth?: number;
   canvasHeight?: number;
   loadWhenVisible?: boolean;
+  assetVersion?: string;
 }
 
 const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
-  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false }, ref) => {
+  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, assetVersion = FRAME_ASSET_VERSION }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     // Forward the ref so parent can measure it if needed
@@ -106,7 +108,7 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
             onLoadProgress?.(loadedRef.current, frameCount);
             pump();
           };
-          img.src = `${frameDir}${String(index + 1).padStart(3, "0")}.png`;
+          img.src = buildFrameAssetUrl(frameDir, index, assetVersion);
           frames[index] = img;
         }
       };

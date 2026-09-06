@@ -5,10 +5,10 @@ import BurgerAnimation from "./BurgerAnimation";
 import styles from "./BurgerExplosionSection.module.css";
 
 const CALLOUTS = [
-  { label: "Toasted sesame bun", progress: 0.2, side: "left" },
-  { label: "Two hand-formed patties", progress: 0.38, side: "right" },
-  { label: "Melted aged cheddar", progress: 0.54, side: "left" },
-  { label: "Fresh-cut toppings", progress: 0.7, side: "right" },
+  { id: "toastedBun", label: "Toasted sesame bun", progress: 0.2, side: "right" },
+  { id: "twoPatties", label: "Two hand-formed patties", progress: 0.38, side: "right" },
+  { id: "agedCheddar", label: "Melted aged cheddar", progress: 0.54, side: "left" },
+  { id: "freshToppings", label: "Fresh-cut toppings", progress: 0.7, side: "right" },
 ] as const;
 
 export default function BurgerExplosionSection() {
@@ -57,7 +57,7 @@ export default function BurgerExplosionSection() {
           return (
             <div
               key={callout.label}
-              className={`${styles.callout} ${styles[callout.side]} ${callout.label === "Fresh-cut toppings" ? styles.freshToppings : ""} ${visible ? styles.visible : ""}`}
+              className={`${styles.callout} ${styles[callout.side]} ${styles[callout.id]} ${visible ? styles.visible : ""}`}
               aria-hidden={!visible}
             >
               <span>{callout.label}</span>
