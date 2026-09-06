@@ -3,12 +3,21 @@
 import * as React from "react";
 import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import { buildFrameAssetUrl, FRAME_ASSET_VERSION } from "@/lib/frameAssets.mjs";
+import {
+  createSparseFrameOrder,
+  findNearestLoadedFrame,
+  prioritizeFrameNeighborhood,
+} from "@/lib/frameLoading.mjs";
 import styles from "./Hero.module.css";
 
 const DEFAULT_FRAME_COUNT = 299;
 const DEFAULT_FRAME_DIR = "/images/burger-build/frame-";
 const DEFAULT_CANVAS_W = 2560;
 const DEFAULT_CANVAS_H = 1440;
+const ACTIVE_LOADS = 6;
+const NEIGHBOR_RADIUS = 7;
+const KEYFRAME_STRIDE = 18;
+type FrameStatus = "idle" | "queued" | "loading" | "loaded" | "error";
 
 interface BurgerAnimationProps {
   /** 0–1 scroll progress from the parent ScrollySection */
@@ -33,23 +42,22 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
 
     const framesRef = useRef<HTMLImageElement[]>([]);
     const loadedRef = useRef(0);
-    const rafRef = useRef<number>(0);
     const currentFrameRef = useRef(-1);
     const targetFrameRef = useRef(0);
-    const statusRef = useRef<Array<"idle" | "loading" | "loaded" | "error">>([]);
+    const statusRef = useRef<FrameStatus[]>([]);
     const queueRef = useRef<number[]>([]);
     const activeLoadsRef = useRef(0);
     const startedRef = useRef(false);
     const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pumpRef = useRef<(() => void) | null>(null);
 
-    /* Draw the best available frame while the rest of the sequence loads. */
+    /* Keep the closest loaded frame visible until the exact target is ready. */
     const drawFrame = React.useCallback((index: number) => {
       const canvas = canvasRef.current;
       const frames = framesRef.current;
-      const img = frames[index]?.complete && frames[index]?.naturalWidth
-        ? frames[index]
-        : frames.find((candidate) => candidate?.complete && candidate.naturalWidth > 0);
+      const drawableIndex = findNearestLoadedFrame(index, statusRef.current);
+      if (drawableIndex === null || drawableIndex === currentFrameRef.current) return;
+      const img = frames[drawableIndex];
       if (!canvas || !img) return;
 
       const ctx = canvas.getContext("2d");
@@ -57,36 +65,39 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
 
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
       ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-      currentFrameRef.current = index;
+      currentFrameRef.current = drawableIndex;
     }, [canvasHeight, canvasWidth]);
 
     /* ── Progressive frame loader ─────────────────────────────────────────── */
     useEffect(() => {
       const frames: HTMLImageElement[] = new Array(frameCount);
       framesRef.current = frames;
-      const statuses: Array<"idle" | "loading" | "loaded" | "error"> = new Array(frameCount).fill("idle");
+      const statuses: FrameStatus[] = new Array(frameCount).fill("idle");
       loadedRef.current = 0;
       statusRef.current = statuses;
       queueRef.current = [];
       activeLoadsRef.current = 0;
       startedRef.current = false;
 
-      const concurrency = 6;
       const enqueue = (index: number, priority = false) => {
         if (index < 0 || index >= frameCount || statuses[index] !== "idle") return;
-        statuses[index] = "loading";
+        statuses[index] = "queued";
         if (priority) queueRef.current.unshift(index);
         else queueRef.current.push(index);
       };
 
       const pump = () => {
-        while (activeLoadsRef.current < concurrency && queueRef.current.length > 0) {
+        while (activeLoadsRef.current < ACTIVE_LOADS && queueRef.current.length > 0) {
           const index = queueRef.current.shift();
           if (index === undefined) break;
+          if (statuses[index] !== "queued") continue;
+          statuses[index] = "loading";
           activeLoadsRef.current += 1;
           const img = new Image();
           img.decoding = "async";
-          img.fetchPriority = index === 0 ? "high" : "low";
+          img.fetchPriority = index === 0 || Math.abs(index - targetFrameRef.current) <= NEIGHBOR_RADIUS
+            ? "high"
+            : "low";
           img.onload = () => {
             statuses[index] = "loaded";
             activeLoadsRef.current -= 1;
@@ -95,8 +106,8 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
             if (index === 0) {
               drawFrame(0);
               onFirstFrameReady?.();
-            } else if (targetFrameRef.current === index) {
-              drawFrame(index);
+            } else {
+              drawFrame(targetFrameRef.current);
             }
             if (loadedRef.current === frameCount) onReady?.();
             pump();
@@ -118,13 +129,15 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
         if (startedRef.current) return;
         startedRef.current = true;
 
-        // Make the opening render useful immediately; the rest is background work.
+        // Make the opening render useful immediately.
         for (let index = 0; index < Math.min(8, frameCount); index += 1) enqueue(index, index === 0);
         pump();
 
-        // Keep first paint responsive; the remainder begins just after the initial burst.
+        // Load a sparse set of keyframes for useful coverage. Exact frames are
+        // fetched on demand as the visitor scrolls instead of downloading the
+        // entire 500+ MB sequence at startup.
         loadTimeoutRef.current = setTimeout(() => {
-          for (let index = 8; index < frameCount; index += 1) enqueue(index);
+          for (const index of createSparseFrameOrder(frameCount, KEYFRAME_STRIDE)) enqueue(index);
           pump();
         }, 250);
       };
@@ -169,32 +182,23 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [drawFrame]);
 
-    /* ── rAF render loop — only re-draws when frame changes ─────────────── */
-    useEffect(() => {
-      function loop() {
-        if (targetFrameRef.current !== currentFrameRef.current) {
-          drawFrame(targetFrameRef.current);
-        }
-        rafRef.current = requestAnimationFrame(loop);
-      }
-      rafRef.current = requestAnimationFrame(loop);
-      return () => cancelAnimationFrame(rafRef.current);
-    }, [drawFrame]);
-
     /* ── Respond to scrollProgress prop ─────────────────────────────────── */
     useEffect(() => {
       const clamped = Math.max(0, Math.min(1, scrollProgress));
       // Map 0–1 to frame index 0–(frameCount-1), with smooth interpolation
       const rawIndex = clamped * (frameCount - 1);
-      targetFrameRef.current = Math.round(rawIndex);
       const target = Math.round(rawIndex);
-      const targetStatus = statusRef.current[target];
-      if (targetStatus === "idle") {
-        statusRef.current[target] = "loading";
-        queueRef.current.unshift(target);
-        pumpRef.current?.();
-      }
-    }, [scrollProgress, frameCount]);
+      targetFrameRef.current = target;
+      prioritizeFrameNeighborhood(
+        queueRef.current,
+        statusRef.current,
+        target,
+        frameCount,
+        NEIGHBOR_RADIUS,
+      );
+      pumpRef.current?.();
+      drawFrame(target);
+    }, [drawFrame, scrollProgress, frameCount]);
 
     return (
       <div ref={wrapperRef} className={styles.canvasWrap}>

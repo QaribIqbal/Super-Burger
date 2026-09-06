@@ -17,3 +17,11 @@ test("all gallery image assets are present locally", () => {
     assert.equal(existsSync(join(galleryDirectory, asset)), true, `${asset} should exist`);
   }
 });
+
+test("the location section has a local map image fallback", () => {
+  assert.equal(
+    existsSync(join(process.cwd(), "public", "images", "location", "city-map.jpg")),
+    true,
+    "city-map.jpg should exist",
+  );
+});
