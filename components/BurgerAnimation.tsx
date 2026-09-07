@@ -15,7 +15,7 @@ const DEFAULT_FRAME_COUNT = 299;
 const DEFAULT_FRAME_DIR = "/images/burger-build/frame-";
 const DEFAULT_CANVAS_W = 2560;
 const DEFAULT_CANVAS_H = 1440;
-const ACTIVE_LOADS = 6;
+const DEFAULT_ACTIVE_LOADS = 4;
 const NEIGHBOR_RADIUS = 7;
 const KEYFRAME_STRIDE = 18;
 type FrameStatus = "idle" | "queued" | "loading" | "loaded" | "error";
@@ -33,11 +33,13 @@ interface BurgerAnimationProps {
   loadWhenVisible?: boolean;
   preloadAll?: boolean;
   readyFrameCount?: number;
+  maxConcurrentLoads?: number;
+  requestPriority?: "high" | "low";
   assetVersion?: string;
 }
 
 const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
-  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, preloadAll = false, readyFrameCount = frameCount, assetVersion = FRAME_ASSET_VERSION }, ref) => {
+  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, preloadAll = false, readyFrameCount = frameCount, maxConcurrentLoads = DEFAULT_ACTIVE_LOADS, requestPriority = "high", assetVersion = FRAME_ASSET_VERSION }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     // Forward the ref so parent can measure it if needed
@@ -93,7 +95,7 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
       };
 
       const pump = () => {
-        while (activeLoadsRef.current < ACTIVE_LOADS && queueRef.current.length > 0) {
+        while (activeLoadsRef.current < maxConcurrentLoads && queueRef.current.length > 0) {
           const index = queueRef.current.shift();
           if (index === undefined) break;
           if (statuses[index] !== "queued") continue;
@@ -101,9 +103,11 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
           activeLoadsRef.current += 1;
           const img = new Image();
           img.decoding = "async";
-          img.fetchPriority = index === 0 || Math.abs(index - targetFrameRef.current) <= NEIGHBOR_RADIUS
-            ? "high"
-            : "low";
+          img.fetchPriority = requestPriority === "low"
+            ? "low"
+            : index === 0 || Math.abs(index - targetFrameRef.current) <= NEIGHBOR_RADIUS
+              ? "high"
+              : "low";
           img.onload = () => {
             statuses[index] = "loaded";
             activeLoadsRef.current -= 1;

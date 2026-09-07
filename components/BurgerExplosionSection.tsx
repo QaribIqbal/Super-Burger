@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 import BurgerAnimation from "./BurgerAnimation";
 import styles from "./BurgerExplosionSection.module.css";
 
@@ -13,6 +14,7 @@ const CALLOUTS = [
 
 export default function BurgerExplosionSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
 
   const updateProgress = useCallback(() => {
@@ -29,6 +31,30 @@ export default function BurgerExplosionSection() {
     return () => window.removeEventListener("scroll", updateProgress);
   }, [updateProgress]);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    const heading = headingRef.current;
+    if (!section || !heading || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let animation: gsap.core.Tween | undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      animation = gsap.fromTo(heading, { autoAlpha: 0, y: 28 }, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.65,
+        ease: "power3.out",
+      });
+      observer.disconnect();
+    }, { threshold: 0.15 });
+
+    observer.observe(section);
+    return () => {
+      observer.disconnect();
+      animation?.kill();
+    };
+  }, []);
+
   return (
     <section
       ref={sectionRef}
@@ -37,7 +63,7 @@ export default function BurgerExplosionSection() {
       aria-labelledby="explosion-title"
     >
       <div className={styles.sticky}>
-        <div className={styles.heading}>
+        <div ref={headingRef} className={styles.heading}>
           <span className={styles.eyebrow}>The build</span>
           <h2 id="explosion-title">Watch it come together.</h2>
           <p>Scroll through every layer. Nothing hidden, nothing hurried.</p>
@@ -49,7 +75,9 @@ export default function BurgerExplosionSection() {
           frameDir="/images/burger-explosion/ezgif-frame-"
           canvasWidth={2560}
           canvasHeight={1440}
-          loadWhenVisible
+          preloadAll
+          maxConcurrentLoads={2}
+          requestPriority="low"
         />
 
         {CALLOUTS.map((callout) => {

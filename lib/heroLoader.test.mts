@@ -3,14 +3,14 @@ import { test } from "node:test";
 
 import { getHeroLoaderState } from "./heroLoader.mjs";
 
-test("the hero loader only waits for its opening frame neighborhood", () => {
-  assert.deepEqual(getHeroLoaderState(2, 3, false), {
-    percent: 67,
+test("the hero loader stays visible until the full animation sequence is ready", () => {
+  assert.deepEqual(getHeroLoaderState(298, 299, false), {
+    percent: 100,
     visible: true,
-    label: "Loading the opening burger frames",
+    label: "Loading the full burger build",
   });
 
-  assert.deepEqual(getHeroLoaderState(3, 3, true), {
+  assert.deepEqual(getHeroLoaderState(299, 299, true), {
     percent: 100,
     visible: false,
     label: "Ready to scroll",
