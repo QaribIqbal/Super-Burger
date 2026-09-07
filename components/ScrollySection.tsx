@@ -8,7 +8,7 @@ import { getHeroLoaderState } from "@/lib/heroLoader.mjs";
 import styles from "./Hero.module.css";
 
 const TRACK_HEIGHT_VH = 400;
-const HERO_FRAME_COUNT = 299;
+const HERO_CRITICAL_FRAME_COUNT = 3;
 
 export default function ScrollySection() {
   const trackRef = useRef<HTMLElement>(null);
@@ -51,7 +51,7 @@ export default function ScrollySection() {
   }, [heroReady]);
 
   /* ── Loader ──────────────────────────────────────────────────────────── */
-  const loaderState = getHeroLoaderState(loadedFrames, HERO_FRAME_COUNT, heroReady);
+  const loaderState = getHeroLoaderState(loadedFrames, HERO_CRITICAL_FRAME_COUNT, heroReady);
   /* ── Ghost text visibility (only during beat 1) ──────────────────────── */
   const showGhost = scrollProgress < 0.2;
 
@@ -88,7 +88,7 @@ export default function ScrollySection() {
           onLoadProgress={(loaded) => setLoadedFrames(loaded)}
           onFirstFrameReady={() => setFirstFrameReady(true)}
           onReady={() => setHeroReady(true)}
-          preloadAll
+          readyFrameCount={HERO_CRITICAL_FRAME_COUNT}
         />
 
         {/* ── Loading overlay ───────────────────────────────────────────── */}
@@ -108,7 +108,7 @@ export default function ScrollySection() {
             <span className={styles.loaderBrandBold}>Burger Co.</span>
           </div>
           <span className={styles.loaderLabel}>{loaderState.label}</span>
-          <span className={styles.loaderSubtext}>Loading every layer for a smooth scroll</span>
+          <span className={styles.loaderSubtext}>Preparing the first bite</span>
           <div className={styles.loaderBar}>
             <div
               className={styles.loaderFill}

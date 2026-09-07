@@ -122,7 +122,15 @@ img {
   .desktop-nav {
     display: none !important;
   }
+  .mobile-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
 }
+
+.mobile-header-actions { display: none; }
+@media (max-width: 768px) { .mobile-header-actions { display: flex; } }
 
 /* ─── Skip-to-content link ─────────────────────────────────────────────────── */
 .skip-to-content {

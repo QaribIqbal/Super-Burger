@@ -97,7 +97,7 @@ export default function ScrollyCopy({ scrollProgress }: ScrollyCopyProps) {
 
         <div className={styles.ctaGroup}>
           <a
-            href={ORDER_URL}
+            href={ORDER_URL ?? "/menu"}
             className={styles.ctaPrimary}
             aria-label="Order Now — opens ordering system"
           >

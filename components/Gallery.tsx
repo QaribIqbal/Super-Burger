@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./Gallery.module.css";
 
 export default function Gallery() {
@@ -7,9 +8,9 @@ export default function Gallery() {
       <div className={styles.gallery__inner}>
         <header className={styles.gallery__header}>
           <h2 id="gallery-title" className={styles.gallery__title}>Gallery</h2>
-          <a href="#" className={styles.gallery__viewAll}>
+          <Link href="/#gallery" className={styles.gallery__viewAll}>
             View All Photos →
-          </a>
+          </Link>
         </header>
         <div className={styles.gallery__grid}>
           <article className={styles.gallery__item}>

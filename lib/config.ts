@@ -1,11 +1,7 @@
-export const ORDER_URL = "https://order.example.com";
+export { businessConfig, type BusinessConfig, formatCurrency, formatPrice, getFullAddress, getOrderUrl, isOrderingEnabled, NAV_LINKS } from "./business-config";
 
+import { businessConfig, getOrderUrl } from "./business-config";
+
+export const ORDER_URL = getOrderUrl(businessConfig);
 export const DELIVERY_PROMISE = "Free Home Delivery";
 export const CURRENT_OFFER = "Today: 50% Off";
-
-export const NAV_LINKS = [
-  { href: "/menu", label: "Menu" },
-  { href: "#story", label: "Our Story" },
-  { href: "#how-its-made", label: "How It's Made" },
-  { href: "#locations", label: "Locations" },
-] as const;

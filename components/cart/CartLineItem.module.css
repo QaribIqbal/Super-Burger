@@ -1,0 +1,177 @@
+.lineItem {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid rgba(43, 27, 18, 0.06);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-accent-gold);
+  flex-shrink: 0;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-accent-gold) 0%, var(--color-rust) 100%);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.name {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--color-ink);
+  line-height: 1.3;
+  flex: 1;
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  color: rgba(43, 27, 18, 0.4);
+  opacity: 0.6;
+  transition: opacity var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.removeButton:hover {
+  opacity: 1;
+  color: var(--color-rust);
+  background: rgba(193, 68, 14, 0.1);
+}
+
+.removeButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.modifiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modifier {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-xs);
+  color: rgba(43, 27, 18, 0.6);
+}
+
+.modifierDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-rust);
+  flex-shrink: 0;
+}
+
+.instructions {
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: var(--text-xs);
+  color: rgba(43, 27, 18, 0.5);
+  font-style: italic;
+  margin: 0;
+}
+
+.instructionsLabel {
+  font-weight: 500;
+  color: rgba(43, 27, 18, 0.6);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-xs);
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--color-cream);
+  border: 1px solid rgba(43, 27, 18, 0.12);
+  border-radius: var(--radius-full);
+  padding: 0.125rem 0.25rem;
+}
+
+.quantityButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  color: var(--color-ink);
+  opacity: 0.7;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
+}
+
+.quantityButton:hover:not(:disabled) {
+  opacity: 1;
+  background: rgba(43, 27, 18, 0.06);
+}
+
+.quantityButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.quantityButton svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.5;
+}
+
+.quantityValue {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-ink);
+  min-width: 1.5ch;
+  text-align: center;
+}
+
+.lineTotal {
+  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-size: var(--text-base);
+  font-weight: 400;
+  color: var(--color-rust);
+  white-space: nowrap;
+}

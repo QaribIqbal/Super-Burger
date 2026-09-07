@@ -1,0 +1,1 @@
+export default function TermsPage() { return <main id="main-content" style={{ padding: "8rem 1rem 5rem", maxWidth: 800, margin: "0 auto" }}><h1>Terms</h1><p>This site is a demonstration restaurant template. Orders are not sent to a restaurant and no payment is collected.</p></main>; }

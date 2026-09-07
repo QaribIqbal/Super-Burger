@@ -1,0 +1,54 @@
+.cartButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  border: 1px solid rgba(43, 27, 18, 0.12);
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.cartButton:hover {
+  background: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+  box-shadow: 0 2px 8px rgba(193, 68, 14, 0.2);
+}
+
+.cartButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.cartIcon {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-family: var(--font-work-sans), "Work Sans", sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  color: var(--color-cream-text);
+  background: var(--color-rust);
+  border-radius: var(--radius-full);
+  transform: scale(1);
+  transition: transform var(--transition-fast);
+}
+
+.cartButton:hover .badge {
+  transform: scale(1.1);
+}

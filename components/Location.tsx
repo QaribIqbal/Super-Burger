@@ -1,5 +1,4 @@
 import Image from "next/image";
-import cityMap from "@/public/images/location/city-map.jpg";
 import { ORDER_URL } from "@/lib/config";
 import styles from "./Location.module.css";
 
@@ -12,7 +11,7 @@ export default function Location() {
             <p className={styles.eyebrow}>Come hungry</p>
             <h2 id="locations-title">Find us in Flavor Town</h2>
           </div>
-          <a href={ORDER_URL} className={styles.orderLink}>Order for delivery →</a>
+          <a href={ORDER_URL ?? "/menu"} className={styles.orderLink}>Order for delivery →</a>
         </header>
 
         <div className={styles.layout}>
@@ -42,19 +41,11 @@ export default function Location() {
           </div>
 
           <figure className={styles.mapCard}>
-            <Image
-              src={cityMap}
-              alt="Printed city street map marked with location pins"
-              fill
-              placeholder="blur"
-              sizes="(max-width: 800px) 100vw, 58vw"
-              className={styles.mapImage}
-            />
+            <Image className={styles.mapEmbed} src="/images/location/city-map.jpg" alt="Illustrated map showing Super Burger Co. in Flavor Town" width={900} height={620} />
             <figcaption className={styles.mapLabel}>
               <span className={styles.mapDot} aria-hidden="true" />
               <span><strong>You found us</strong>123 Burger Lane</span>
             </figcaption>
-            <small className={styles.credit}>Photo by GeoJango Maps on Unsplash</small>
           </figure>
         </div>
       </div>

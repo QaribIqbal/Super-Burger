@@ -1,306 +1,58 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import {
-  menuItems,
-  categories,
-  getItemsByCategory,
-  type MenuItem,
-} from "@/lib/menu-data";
+import { useEffect, useRef, useState } from "react";
+import { categories, menuItems, type CategoryId, type MenuItem, type MenuTag } from "@/lib/menu-data";
+import { formatCents } from "@/lib/pricing";
+import { businessConfig } from "@/lib/business-config";
+import { useCart } from "@/components/cart/CartProvider";
+import ProductCustomizer from "@/components/menu/ProductCustomizer";
+import styles from "./page.module.css";
 
-export default function Menu() {
-  const [selectedCategory, setSelectedCategory] = useState<MenuItem["category"] | null>(
-    null
-  );
-  const [filter, setFilter] = useState<"spicy" | "veg" | "popular" | null>(null);
+const filters: { id: MenuTag; label: string }[] = [
+  { id: "spicy", label: "Spicy" }, { id: "vegetarian", label: "Vegetarian" },
+  { id: "popular", label: "Popular" }, { id: "new", label: "New" },
+];
 
-  const filteredItems = selectedCategory
-    ? getItemsByCategory(selectedCategory).filter(
-        (item) => !filter || item.tags?.includes(filter)
-      )
-    : menuItems;
+export default function MenuPage() {
+  const [category, setCategory] = useState<CategoryId | null>(null);
+  const [activeFilters, setActiveFilters] = useState<MenuTag[]>([]);
+  const [customizing, setCustomizing] = useState<MenuItem | null>(null);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const { addLine, itemCount } = useCart();
+  const triggerRef = useRef<HTMLElement>(null);
+  const filteredItems = menuItems.filter((item) => item.availability !== "hidden" && (!category || item.category === category) && activeFilters.every((filter) => item.tags?.includes(filter)));
 
-  return (
-    <section className="menu" aria-labelledby="menu-title">
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 1rem" }}>
-        <header style={{ marginBottom: "3rem" }}>
-          <h2 id="menu-title" style={{
-            fontFamily: "'Archivo Black', sans-serif",
-            fontSize: "2rem",
-            fontWeight: 400,
-            letterSpacing: "-0.01em",
-            textTransform: "uppercase",
-            color: "#2B1B12",
-          }}>
-            Menu
-          </h2>
-          <p style={{
-            fontFamily: "Work Sans, sans-serif",
-            fontSize: "0.875rem",
-            color: "#2B1B12",
-            opacity: 0.6,
-          }}>
-            Fresh ingredients, made to order
-          </p>
-        </header>
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    const target = id ? document.getElementById(id) : null;
+    if (target) {
+      window.setTimeout(() => { setHighlightedId(id); target.scrollIntoView({ block: "start" }); }, 0);
+      window.setTimeout(() => setHighlightedId(null), 2200);
+    }
+  }, []);
 
-        <nav style={{ marginBottom: "3rem" }}>
-          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem" }}>
-            <button
-              style={{
-                fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: selectedCategory === null ? "#2B1B12" : "#B75A39",
-                padding: "0.5rem 1rem",
-                borderRadius: "9999px",
-                border: selectedCategory === null ? "1px solid #B75A39" : "none",
-                background: selectedCategory === null ? "transparent" : "#EEDABF",
-                ...(selectedCategory === null && {
-                  color: "#2B1B12",
-                  borderColor: "#B75A39",
-                  background: "transparent",
-                }),
-                ...(selectedCategory !== null && {
-                  color: "#FBF3E3",
-                  borderColor: "#B75A39",
-                  background: "#B75A39",
-                }),
-                transition: "all 150ms ease",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-              onClick={() => setSelectedCategory(null)}
-              aria-pressed={!selectedCategory}
-              aria-label="Show all categories"
-            >
-              All Items
-            </button>
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                style={{
-                  fontFamily: "Work Sans, sans-serif",
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: selectedCategory === category.id
-                    ? "#FBF3E3"
-                    : "#2B1B12",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "9999px",
-                  border: selectedCategory === category.id
-                    ? "1px solid #B75A39"
-                    : "1px solid transparent",
-                  background: selectedCategory === category.id
-                    ? "#B75A39"
-                    : "transparent",
-                  ...(selectedCategory === category.id && {
-                    color: "#FBF3E3",
-                    borderColor: "#B75A39",
-                    background: "#B75A39",
-                  }),
-                  ...(selectedCategory !== category.id && {
-                    color: "#2B1B12",
-                    borderColor: "transparent",
-                    background: "transparent",
-                  }),
-                  transition: "all 150ms ease",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-                onClick={() => setSelectedCategory(category.id as MenuItem["category"])}
-                aria-pressed={selectedCategory === category.id}
-                aria-label={`Show ${category.label} menu`}
-              >
-                {category.label}
-              </button>
-            ))}
-          </div>
+  const clearFilters = () => { setCategory(null); setActiveFilters([]); };
+  const toggleFilter = (filter: MenuTag) => setActiveFilters((current) => current.includes(filter) ? current.filter((value) => value !== filter) : [...current, filter]);
 
-          <div style={{ marginBottom: "1.5rem" }}>
-            <button
-              style={{
-                fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                color: "#2B1B12",
-                padding: "0.25rem 0.5rem",
-                borderRadius: "9999px",
-                border: "1px solid #B75A39",
-                background: "transparent",
-                transition: "all 150ms ease",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-              onClick={() => setFilter("spicy")}
-              aria-pressed={filter === "spicy"}
-              aria-label="Filter spicy items"
-            >
-              Spicy {filter === "spicy" ? "Active" : ""}
-            </button>
-            <button
-              style={{
-                fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                color: "#2B1B12",
-                padding: "0.25rem 0.5rem",
-                borderRadius: "9999px",
-                border: "1px solid #B75A39",
-                background: "transparent",
-                transition: "all 150ms ease",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-              onClick={() => setFilter("veg")}
-              aria-pressed={filter === "veg"}
-              aria-label="Filter vegetarian items"
-            >
-              Veg {filter === "veg" ? "Active" : ""}
-            </button>
-            <button
-              style={{
-                fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.75rem",
-                fontWeight: 500,
-                color: "#2B1B12",
-                padding: "0.25rem 0.5rem",
-                borderRadius: "9999px",
-                border: "1px solid #B75A39",
-                background: "transparent",
-                transition: "all 150ms ease",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-              onClick={() => setFilter("popular")}
-              aria-pressed={filter === "popular"}
-              aria-label="Filter popular items"
-            >
-              Popular {filter === "popular" ? "Active" : ""}
-            </button>
-          </div>
-        </nav>
-
-        <div style={{ display: "grid", gap: "1.5rem" }}>
-          {filteredItems.map((item) => (
-            <article
-              key={item.id}
-              style={{
-                background: "#FBF3E3",
-                borderRadius: 8,
-                overflow: "hidden",
-                boxShadow: "0 4px 12px rgba(43, 27, 18, 0.12)",
-                transition: "transform 150ms ease, box-shadow 150ms ease",
-              }}
-            >
-              <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#B75A39" }}>
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              <div style={{ padding: "1rem" }}>
-                <h3 style={{
-                  fontFamily: "'Archivo Black', sans-serif",
-                  fontSize: "1rem",
-                  fontWeight: 400,
-                  textTransform: "uppercase",
-                  color: "#2B1B12",
-                  marginBottom: "0.25rem",
-                }}>
-                  {item.name}
-                </h3>
-                <p style={{
-                  fontFamily: "Work Sans, sans-serif",
-                  fontSize: "0.75rem",
-                  lineHeight: 1.5,
-                  color: "#2B1B12",
-                  opacity: 0.7,
-                  marginBottom: "0.75rem",
-                }}>
-                  {item.description}
-                </p>
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  {item.tags?.map((tag) => {
-                    if (tag === "spicy") {
-                      return (
-                        <span
-                          key={tag}
-                          style={{
-                            fontFamily: "Work Sans, sans-serif",
-                            fontSize: "0.625rem",
-                            fontWeight: 600,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.05em",
-                            padding: "0.25rem 0.5rem",
-                            borderRadius: "9999px",
-                            background: "#B75A39",
-                            color: "#FBF3E3",
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      );
-                    }
-                    if (tag === "veg") {
-                      return (
-                        <span
-                          key={tag}
-                          style={{
-                            fontFamily: "Work Sans, sans-serif",
-                            fontSize: "0.625rem",
-                            fontWeight: 600,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.05em",
-                            padding: "0.25rem 0.5rem",
-                            borderRadius: "9999px",
-                            background: "#2B1B12",
-                            color: "#FBF3E3",
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      );
-                    }
-                    if (tag === "popular") {
-                      return (
-                        <span
-                          key={tag}
-                          style={{
-                            fontFamily: "Work Sans, sans-serif",
-                            fontSize: "0.625rem",
-                            fontWeight: 600,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.05em",
-                            padding: "0.25rem 0.5rem",
-                            borderRadius: "9999px",
-                            background: "#F2A93B",
-                            color: "#2B1B12",
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
-                <div style={{ fontFamily: "'Archivo Black', sans-serif", fontSize: "1rem", color: "#B75A39" }}>
-                  ${item.price.toFixed(2)}
-                </div>
-              </div>
-            </article>
-          ))}
+  return <main id="main-content" className={styles.page}>
+    <div className={styles.inner}>
+      <header className={styles.intro}><p className={styles.eyebrow}>Order online · demo checkout</p><h1 className={styles.title}>The menu</h1><p>Fresh-grilled burgers, crisp sides, and cold drinks. Customize your order, then choose pickup or delivery at checkout.</p></header>
+      <section className={styles.toolbar} aria-label="Menu filters">
+        <div className={styles.scroller} role="group" aria-label="Categories">
+          <button type="button" className={styles.tab} aria-pressed={category === null} onClick={() => setCategory(null)}>All Items</button>
+          {categories.map((item) => <button type="button" key={item.id} className={styles.tab} aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}</button>)}
         </div>
-      </div>
-    </section>
-  );
+        <div className={styles.filterRow}>{filters.map((filter) => <button type="button" key={filter.id} className={styles.filter} aria-pressed={activeFilters.includes(filter.id)} onClick={() => toggleFilter(filter.id)}>{filter.label}</button>)}{(category || activeFilters.length > 0) && <button type="button" className={styles.clear} onClick={clearFilters}>Clear filters</button>}<span className={styles.count} role="status" aria-live="polite">{filteredItems.length} {filteredItems.length === 1 ? "item" : "items"}</span></div>
+      </section>
+      {filteredItems.length === 0 ? <div className={styles.empty}><h2>Nothing matches yet</h2><p>Try another category or clear your filters.</p><button type="button" onClick={clearFilters}>Show all items</button></div> : <div className={styles.grid}>
+        {filteredItems.map((item) => <article key={item.id} id={item.id} className={`${styles.card} ${highlightedId === item.id ? styles.highlighted : ""}`}>
+          <div className={styles.image}><Image src={item.image} alt="" fill sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw" /></div>
+          <div className={styles.body}><div className={styles.badges}>{item.tags?.slice(0, 2).map((tag) => <span key={tag} className={styles.badge}>{tag}</span>)}</div><h2 className={styles.name}>{item.name}</h2><p className={styles.description}>{item.description}</p><p className={styles.meta}>{item.allergens?.length ? `Contains: ${item.allergens.join(", ")}` : "No listed allergens"}{item.availability === "limited" ? " · Limited availability" : ""}</p><div className={styles.cardFooter}><span className={styles.price}>{formatCents(item.basePriceCents, businessConfig)}</span><button type="button" className={styles.add} disabled={item.availability === "unavailable"} onClick={(event) => { triggerRef.current = event.currentTarget; if (item.modifierGroups?.length) { setCustomizing(item); } else { addLine({ productId: item.id, quantity: 1, selectedModifiers: [], specialInstructions: "" }); } }}>{item.availability === "unavailable" ? "Unavailable" : item.modifierGroups?.length ? "Customize" : "Add"}</button></div></div>
+        </article>)}
+      </div>}
+    </div>
+    {itemCount > 0 && <a className={styles.mobileCart} href="/checkout">View cart · {itemCount}</a>}
+    {customizing && <ProductCustomizer item={customizing} open onClose={() => setCustomizing(null)} triggerRef={triggerRef} />}
+  </main>;
 }

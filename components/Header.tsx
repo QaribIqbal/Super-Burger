@@ -1,12 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { NAV_LINKS, ORDER_URL } from "@/lib/config";
+import { businessConfig, NAV_LINKS, isOrderingEnabled } from "@/lib/business-config";
+import CartButton from "./cart/CartButton";
+import CartDrawer from "./cart/CartDrawer";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const mobileNavRef = useRef<HTMLElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +25,7 @@ export default function Header() {
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
+      mobileNavRef.current?.focus();
     } else {
       document.body.style.overflow = "";
     }
@@ -27,6 +33,33 @@ export default function Header() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  const closeMobileNav = useCallback(() => {
+    setMobileOpen(false);
+    mobileToggleRef.current?.focus();
+  }, []);
+
+  const handleMobileNavKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Tab") {
+      const focusableElements = mobileNavRef.current?.querySelectorAll<HTMLElement>(
+        'a, button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusableElements?.length) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  }, []);
+
+  const orderingEnabled = isOrderingEnabled();
 
   return (
     <header
@@ -74,7 +107,7 @@ export default function Header() {
             gap: "0.25rem",
             flexShrink: 0,
           }}
-          aria-label="Super Burger Co. — home"
+          aria-label={`${businessConfig.brand.name} — home`}
         >
           <span
             style={{
@@ -126,7 +159,6 @@ export default function Header() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  onClick={() => setMobileOpen(false)}
                   style={{
                     fontFamily: "var(--font-work-sans), 'Work Sans', sans-serif",
                     fontSize: "var(--text-sm)",
@@ -149,45 +181,53 @@ export default function Header() {
             ))}
           </ul>
 
+          {/* Cart button - always visible on desktop */}
+          <CartButton onOpen={() => setCartOpen(true)} />
+
           {/* CTA button — rust → gold gradient */}
-          <a
-            href={ORDER_URL}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "0.5rem 1.375rem",
-              fontFamily: "var(--font-work-sans), 'Work Sans', sans-serif",
-              fontSize: "var(--text-sm)",
-              fontWeight: 600,
-              color: "var(--color-cream-text)",
-              background:
-                "linear-gradient(100deg, var(--color-rust) 0%, var(--color-accent-gold) 100%)",
-              borderRadius: "var(--radius-full)",
-              textDecoration: "none",
-              letterSpacing: "0.02em",
-              transition:
-                "opacity var(--transition-fast), box-shadow var(--transition-fast)",
-              boxShadow: "0 2px 12px rgba(193, 68, 14, 0.3)",
-              flexShrink: 0,
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLAnchorElement;
-              el.style.opacity = "0.9";
-              el.style.boxShadow = "0 4px 20px rgba(193, 68, 14, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLAnchorElement;
-              el.style.opacity = "1";
-              el.style.boxShadow = "0 2px 12px rgba(193, 68, 14, 0.3)";
-            }}
-          >
-            Order Now
-          </a>
+          {orderingEnabled && (
+            <a
+              href="/checkout"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0.5rem 1.375rem",
+                fontFamily: "var(--font-work-sans), 'Work Sans', sans-serif",
+                fontSize: "var(--text-sm)",
+                fontWeight: 600,
+                color: "var(--color-cream-text)",
+                background:
+                  "linear-gradient(100deg, var(--color-rust) 0%, var(--color-accent-gold) 100%)",
+                borderRadius: "var(--radius-full)",
+                textDecoration: "none",
+                letterSpacing: "0.02em",
+                transition:
+                  "opacity var(--transition-fast), box-shadow var(--transition-fast)",
+                boxShadow: "0 2px 12px rgba(193, 68, 14, 0.3)",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.opacity = "0.9";
+                el.style.boxShadow = "0 4px 20px rgba(193, 68, 14, 0.5)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.opacity = "1";
+                el.style.boxShadow = "0 2px 12px rgba(193, 68, 14, 0.3)";
+              }}
+            >
+              Order Now
+            </a>
+          )}
         </nav>
 
-        {/* Mobile hamburger — hidden on desktop via CSS */}
-        <button
+        <div className="mobile-header-actions">
+          <CartButton onOpen={() => setCartOpen(true)} />
+          {/* Mobile hamburger — hidden on desktop via CSS */}
+          <button
+          ref={mobileToggleRef}
           className="mobile-menu-toggle"
           style={{
             display: "none",
@@ -203,7 +243,7 @@ export default function Header() {
           }}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-expanded={mobileOpen}
-          aria-controls="main-navigation"
+          aria-controls="mobile-navigation"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
           {mobileOpen ? (
@@ -231,13 +271,17 @@ export default function Header() {
               <path d="M3 12h18M3 6h18M3 18h18" />
             </svg>
           )}
-        </button>
+          </button>
+        </div>
       </div>
 
       {/* Mobile nav drawer */}
       {mobileOpen && (
         <nav
+          ref={mobileNavRef}
+          id="mobile-navigation"
           aria-label="Mobile navigation"
+          onKeyDown={handleMobileNavKeyDown}
           style={{
             position: "fixed",
             top: "var(--header-height)",
@@ -258,7 +302,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => setMobileOpen(false)}
+              onClick={closeMobileNav}
               style={{
                 fontFamily:
                   "var(--font-archivo-black), 'Archivo Black', sans-serif",
@@ -273,29 +317,33 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <a
-            href={ORDER_URL}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "0.75rem 2rem",
-              fontFamily: "var(--font-work-sans), 'Work Sans', sans-serif",
-              fontSize: "var(--text-base)",
-              fontWeight: 600,
-              color: "var(--color-cream-text)",
-              background:
-                "linear-gradient(100deg, var(--color-rust) 0%, var(--color-accent-gold) 100%)",
-              borderRadius: "var(--radius-full)",
-              textDecoration: "none",
-              marginTop: "var(--space-sm)",
-              alignSelf: "flex-start",
-            }}
-          >
-            Order Now
-          </a>
+          {orderingEnabled && (
+            <a
+              href="/checkout"
+              onClick={closeMobileNav}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0.75rem 2rem",
+                fontFamily: "var(--font-work-sans), 'Work Sans', sans-serif",
+                fontSize: "var(--text-base)",
+                fontWeight: 600,
+                color: "var(--color-cream-text)",
+                background:
+                  "linear-gradient(100deg, var(--color-rust) 0%, var(--color-accent-gold) 100%)",
+                borderRadius: "var(--radius-full)",
+                textDecoration: "none",
+                marginTop: "var(--space-sm)",
+                alignSelf: "flex-start",
+              }}
+            >
+              Order Now
+            </a>
+          )}
         </nav>
       )}
+      <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </header>
   );
 }

@@ -6,6 +6,7 @@ import { buildFrameAssetUrl, FRAME_ASSET_VERSION } from "@/lib/frameAssets.mjs";
 import {
   createSparseFrameOrder,
   findNearestLoadedFrame,
+  hasCriticalFrameSetReady,
   prioritizeFrameNeighborhood,
 } from "@/lib/frameLoading.mjs";
 import styles from "./Hero.module.css";
@@ -31,11 +32,12 @@ interface BurgerAnimationProps {
   canvasHeight?: number;
   loadWhenVisible?: boolean;
   preloadAll?: boolean;
+  readyFrameCount?: number;
   assetVersion?: string;
 }
 
 const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
-  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, preloadAll = false, assetVersion = FRAME_ASSET_VERSION }, ref) => {
+  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, preloadAll = false, readyFrameCount = frameCount, assetVersion = FRAME_ASSET_VERSION }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     // Forward the ref so parent can measure it if needed
@@ -49,6 +51,7 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
     const queueRef = useRef<number[]>([]);
     const activeLoadsRef = useRef(0);
     const startedRef = useRef(false);
+    const readySignaledRef = useRef(false);
     const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pumpRef = useRef<(() => void) | null>(null);
 
@@ -80,6 +83,7 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
       queueRef.current = [];
       activeLoadsRef.current = 0;
       startedRef.current = false;
+      readySignaledRef.current = false;
 
       const enqueue = (index: number, priority = false) => {
         if (index < 0 || index >= frameCount || statuses[index] !== "idle") return;
@@ -111,7 +115,10 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
             } else {
               drawFrame(targetFrameRef.current);
             }
-            if (loadedRef.current === frameCount) onReady?.();
+            if (!readySignaledRef.current && hasCriticalFrameSetReady(statuses, readyFrameCount)) {
+              readySignaledRef.current = true;
+              onReady?.();
+            }
             pump();
           };
           img.onerror = () => {

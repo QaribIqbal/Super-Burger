@@ -1,0 +1,1 @@
+export default function PrivacyPage() { return <main id="main-content" style={{ padding: "8rem 1rem 5rem", maxWidth: 800, margin: "0 auto" }}><h1>Privacy</h1><p>This template does not collect or transmit personal data. Demo checkout details remain in your browser session only.</p></main>; }

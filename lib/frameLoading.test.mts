@@ -4,6 +4,7 @@ import { test } from "node:test";
 import {
   createSparseFrameOrder,
   findNearestLoadedFrame,
+  hasCriticalFrameSetReady,
   prioritizeFrameNeighborhood,
 } from "./frameLoading.mjs";
 
@@ -32,4 +33,9 @@ test("the initial background queue is sparse and includes both endpoints", () =>
   assert.equal(order[0], 0);
   assert.equal(order.at(-1), 118);
   assert.ok(order.length < 15);
+});
+
+test("the opening sequence is ready only after every critical frame loads", () => {
+  assert.equal(hasCriticalFrameSetReady(["loaded", "loaded", "idle"], 3), false);
+  assert.equal(hasCriticalFrameSetReady(["loaded", "loaded", "loaded", "idle"], 3), true);
 });

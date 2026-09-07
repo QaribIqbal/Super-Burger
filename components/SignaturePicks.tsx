@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./SignaturePicks.module.css";
 import { getSignaturePicks } from "@/lib/menu-data";
+import { formatPrice } from "@/lib/business-config";
 
 export default function SignaturePicks() {
   const items = getSignaturePicks();
@@ -38,7 +39,7 @@ export default function SignaturePicks() {
                 <h3 className={styles.signature__name}>{item.name}</h3>
                 <p className={styles.signature__description}>{item.description}</p>
                 <div className={styles.signature__footer}>
-                  <span className={styles.signature__price}>${item.price.toFixed(2)}</span>
+                  <span className={styles.signature__price}>{formatPrice(item.basePriceCents / 100)}</span>
                   <Link href={`/menu#${item.id}`} className={styles.signature__link}>
                     View Details
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

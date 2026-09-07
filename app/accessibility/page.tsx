@@ -1,0 +1,1 @@
+export default function AccessibilityPage() { return <main id="main-content" style={{ padding: "8rem 1rem 5rem", maxWidth: 800, margin: "0 auto" }}><h1>Accessibility</h1><p>We aim to support keyboard navigation, readable contrast, reduced motion, and responsive layouts. Contact us if you encounter an accessibility barrier.</p></main>; }

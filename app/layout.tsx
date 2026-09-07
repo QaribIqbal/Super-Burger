@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Archivo_Black, Work_Sans } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { CartProvider } from "@/components/cart/CartProvider";
 
 const caveat = Caveat({
   variable: "--font-caveat",
@@ -46,6 +49,7 @@ export default function RootLayout({
 }) {
   return (
     <html
+      data-scroll-behavior="smooth"
       lang="en"
       className={`${caveat.variable} ${archivoBlack.variable} ${workSans.variable} antialiased`}
     >
@@ -56,7 +60,11 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>
-        {children}
+        <CartProvider>
+          <Header />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
