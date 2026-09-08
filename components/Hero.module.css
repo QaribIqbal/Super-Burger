@@ -188,7 +188,7 @@
 }
 
 .headline {
-  font-family: var(--font-archivo-black), "Archivo Black", sans-serif;
+  font-family: var(--font-mochilo), sans-serif;
   font-size: clamp(2.2rem, 6vw, var(--text-hero));
   font-weight: 400;
   text-transform: uppercase;
