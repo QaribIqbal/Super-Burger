@@ -18,19 +18,20 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<{ field: string; message: string }[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [confirmation, setConfirmation] = useState<OrderConfirmation | null>(null);
+  const shouldFocusSummary = useRef(false);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const pricing = getPricingBreakdown(form.fulfillmentMethod === "delivery");
   const summaryLines = getCheckoutSummaryLines(state, menuItems);
 
   useEffect(() => { try { const raw = sessionStorage.getItem(confirmationKey); if (raw) setConfirmation(JSON.parse(raw)); } catch { /* safe missing-state fallback */ } }, []);
-  useEffect(() => { if (errors.length) errorSummaryRef.current?.focus(); }, [errors]);
+  useEffect(() => { if (shouldFocusSummary.current && errors.length) { shouldFocusSummary.current = false; errorSummaryRef.current?.focus(); } }, [errors]);
 
   if (confirmation) return <main id="main-content" className={styles.page}><div className={styles.confirmation}><p className={styles.demo}>Demo order confirmation</p><h1>Order received</h1><div className={styles.confirmationBox}><p><strong>{confirmation.orderId}</strong></p><p>{confirmation.demoMessage}</p><p>Total: <strong>{formatCents(confirmation.totalCents, businessConfig)}</strong></p><p>Estimated {confirmation.fulfillmentMethod === "pickup" ? "ready" : "delivery"}: {new Date(confirmation.estimatedReadyTime).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</p></div><Link className={styles.link} href="/menu">Order something else</Link></div></main>;
   if (isEmpty) return <main id="main-content" className={styles.page}><div className={styles.empty}><h1>Your cart is empty</h1><p>Add something delicious before checking out.</p><Link className={styles.link} href="/menu">Browse the menu</Link></div></main>;
 
   const update = (field: keyof CheckoutFormData, value: string) => setForm((current) => ({ ...current, [field]: value }));
   const validate = () => { const result = validateCheckoutForm(form, state); setErrors(result.errors); return result.valid; };
-  const submit = async (event: React.FormEvent) => { event.preventDefault(); if (!validate()) return; setSubmitting(true); try { const result = await demoOrderAdapter.submitOrder(form, pricing); const saved = { ...result, items: summaryLines }; sessionStorage.setItem(confirmationKey, JSON.stringify(saved)); setConfirmation(saved); clearCart(); } catch (error) { setErrors([{ field: "form", message: error instanceof Error ? error.message : "We could not submit the demo order." }]); } finally { setSubmitting(false); } };
+  const submit = async (event: React.FormEvent) => { event.preventDefault(); shouldFocusSummary.current = true; if (!validate()) return; setSubmitting(true); try { const result = await demoOrderAdapter.submitOrder(form, pricing); const saved = { ...result, items: summaryLines }; sessionStorage.setItem(confirmationKey, JSON.stringify(saved)); setConfirmation(saved); clearCart(); } catch (error) { setErrors([{ field: "form", message: error instanceof Error ? error.message : "We could not submit the demo order." }]); } finally { setSubmitting(false); } };
   const errorFor = (field: string) => getFieldError(errors, field);
   const input = (field: keyof CheckoutFormData, label: string, type = "text", full = false) => <div className={`${styles.field} ${full ? styles.full : ""}`}><label htmlFor={`checkout-${field}`}>{label}</label><input id={`checkout-${field}`} type={type} value={String(form[field] ?? "")} onChange={(event) => update(field, event.target.value)} onBlur={validate} aria-invalid={Boolean(errorFor(field))} aria-describedby={errorFor(field) ? `error-${field}` : undefined} />{errorFor(field) && <span id={`error-${field}`} className={styles.fieldError}>{errorFor(field)}</span>}</div>;
 

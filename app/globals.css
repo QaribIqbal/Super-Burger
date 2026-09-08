@@ -1,1 +1,9 @@
 @import "../styles/tokens.css";
+
+@font-face {
+  font-family: "Mochilo";
+  src: url("/fonts/mochilo.otf") format("opentype");
+  font-display: swap;
+  font-weight: 400 900;
+  font-style: normal;
+}
