@@ -15,7 +15,7 @@
 .callout.right { right: clamp(1.5rem, 8vw, 9rem); transform: translateX(1rem); }
 .callout.toastedBun { top: 31%; right: clamp(2rem, 11vw, 13rem); }
 .callout.visible { opacity: 1; transform: translateX(0); }
-.callout span { position: relative; display: block; padding: .28rem .75rem .42rem; border: 1px solid rgba(43,27,18,.16); border-radius: .3rem .65rem .38rem .72rem; background: rgba(251,243,227,.94); color: var(--color-ink); font-family: var(--font-caveat), cursive; font-size: clamp(1.25rem, 2vw, 1.8rem); font-weight: 700; line-height: 1; letter-spacing: .01em; box-shadow: 0 7px 18px rgba(43,27,18,.14); transform: rotate(-2deg); }
+.callout span { position: relative; display: block; padding: .28rem .75rem .42rem; border: 1px solid rgba(43,27,18,.16); border-radius: .3rem .65rem .38rem .72rem; background: rgba(251,243,227,.94); color: var(--color-ink); font-family: var(--font-mochilo); font-size: clamp(1.25rem, 2vw, 1.8rem); font-weight: 700; line-height: 1; letter-spacing: .01em; box-shadow: 0 7px 18px rgba(43,27,18,.14); transform: rotate(-2deg); }
 .callout.right span { transform: rotate(1.5deg); }
 .callout span::after { content: ""; position: absolute; left: .6rem; right: .45rem; bottom: .22rem; border-top: 2px solid rgba(181,86,50,.72); transform: rotate(-1deg); }
 .callout::after { content: ""; position: absolute; top: 52%; width: clamp(2rem, 5vw, 5rem); border-top: 2px dashed rgba(43,27,18,.65); transform: rotate(-2deg); }
