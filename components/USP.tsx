@@ -25,7 +25,7 @@ export default function USP() {
           </h2>
           <p style={{
             fontFamily: "Work Sans, sans-serif",
-            fontSize: "0.875rem",
+            fontSize: "1rem",
             color: "#2B1B12",
             opacity: 0.6,
           }}>
@@ -35,21 +35,22 @@ export default function USP() {
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "2rem",
+          gap: "1.5rem",
         }}>
           <div style={{
             display: "flex",
             alignItems: "flex-start",
-            gap: "1.5rem",
-            padding: "1.5rem",
+            gap: "1.25rem",
+            minHeight: 168,
+            padding: "2rem",
             borderRadius: 8,
             background: "var(--color-cream-text)",
             transition: "transform 250ms ease, box-shadow 250ms ease",
           }}>
             <div style={{
               flexShrink: 0,
-              width: 48,
-              height: 48,
+              width: 56,
+              height: 56,
               borderRadius: "9999px",
               background: "#B75A39",
               display: "flex",
@@ -63,8 +64,8 @@ export default function USP() {
             <div style={{ flex: 1 }}>
               <p style={{
                 fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.875rem",
-                fontWeight: 500,
+                fontSize: "1rem",
+                fontWeight: 700,
                 color: "#2B1B12",
                 marginBottom: "0.25rem",
               }}>
@@ -72,8 +73,8 @@ export default function USP() {
               </p>
               <p style={{
                 fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.75rem",
-                lineHeight: 1.5,
+                fontSize: "0.9375rem",
+                lineHeight: 1.65,
                 color: "#2B1B12",
                 opacity: 0.7,
               }}>
@@ -84,16 +85,17 @@ export default function USP() {
           <div style={{
             display: "flex",
             alignItems: "flex-start",
-            gap: "1.5rem",
-            padding: "1.5rem",
+            gap: "1.25rem",
+            minHeight: 168,
+            padding: "2rem",
             borderRadius: 8,
             background: "var(--color-cream-text)",
             transition: "transform 250ms ease, box-shadow 250ms ease",
           }}>
             <div style={{
               flexShrink: 0,
-              width: 48,
-              height: 48,
+              width: 56,
+              height: 56,
               borderRadius: "9999px",
               background: "#F2A93B",
               color: "#2B1B12",
@@ -108,8 +110,8 @@ export default function USP() {
             <div style={{ flex: 1 }}>
               <p style={{
                 fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.875rem",
-                fontWeight: 500,
+                fontSize: "1rem",
+                fontWeight: 700,
                 color: "#2B1B12",
                 marginBottom: "0.25rem",
               }}>
@@ -117,8 +119,8 @@ export default function USP() {
               </p>
               <p style={{
                 fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.75rem",
-                lineHeight: 1.5,
+                fontSize: "0.9375rem",
+                lineHeight: 1.65,
                 color: "#2B1B12",
                 opacity: 0.7,
               }}>
@@ -129,16 +131,17 @@ export default function USP() {
           <div style={{
             display: "flex",
             alignItems: "flex-start",
-            gap: "1.5rem",
-            padding: "1.5rem",
+            gap: "1.25rem",
+            minHeight: 168,
+            padding: "2rem",
             borderRadius: 8,
             background: "var(--color-cream-text)",
             transition: "transform 250ms ease, box-shadow 250ms ease",
           }}>
             <div style={{
               flexShrink: 0,
-              width: 48,
-              height: 48,
+              width: 56,
+              height: 56,
               borderRadius: "9999px",
               background: "#2B1B12",
               color: "#FBF3E3",
@@ -153,8 +156,8 @@ export default function USP() {
             <div style={{ flex: 1 }}>
               <p style={{
                 fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.875rem",
-                fontWeight: 500,
+                fontSize: "1rem",
+                fontWeight: 700,
                 color: "#2B1B12",
                 marginBottom: "0.25rem",
               }}>
@@ -162,8 +165,8 @@ export default function USP() {
               </p>
               <p style={{
                 fontFamily: "Work Sans, sans-serif",
-                fontSize: "0.75rem",
-                lineHeight: 1.5,
+                fontSize: "0.9375rem",
+                lineHeight: 1.65,
                 color: "#2B1B12",
                 opacity: 0.7,
               }}>
