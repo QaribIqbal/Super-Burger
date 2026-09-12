@@ -3,6 +3,7 @@ import { test } from "node:test";
 
 import {
   createSparseFrameOrder,
+  createCriticalFrameOrder,
   findNearestLoadedFrame,
   hasCriticalFrameSetReady,
   prioritizeFrameNeighborhood,
@@ -38,4 +39,9 @@ test("the initial background queue is sparse and includes both endpoints", () =>
 test("the opening sequence is ready only after every critical frame loads", () => {
   assert.equal(hasCriticalFrameSetReady(["loaded", "loaded", "idle"], 3), false);
   assert.equal(hasCriticalFrameSetReady(["loaded", "loaded", "loaded", "idle"], 3), true);
+});
+
+test("the critical frame order is bounded and keeps the opening frame first", () => {
+  assert.deepEqual(createCriticalFrameOrder(299, 8), [0, 1, 2, 3, 4, 5, 6, 7]);
+  assert.deepEqual(createCriticalFrameOrder(3, 8), [0, 1, 2]);
 });

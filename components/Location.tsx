@@ -41,7 +41,7 @@ export default function Location() {
           </div>
 
           <figure className={styles.mapCard}>
-            <Image className={styles.mapEmbed} src="/images/location/city-map.jpg" alt="Illustrated map showing Super Burger Co. in Flavor Town" width={900} height={620} />
+            <Image className={styles.mapEmbed} src="/images/location/city-map.webp" alt="Illustrated map showing Super Burger Co. in Flavor Town" width={900} height={620} />
             <figcaption className={styles.mapLabel}>
               <span className={styles.mapDot} aria-hidden="true" />
               <span><strong>You found us</strong>123 Burger Lane</span>

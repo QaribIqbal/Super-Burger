@@ -15,7 +15,7 @@ export default function Gallery() {
         <div className={styles.gallery__grid}>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/gallery/classic-burger-2026.jpg"
+              src="/images/gallery/classic-burger-2026.webp"
               alt="Classic cheeseburger with lettuce, tomato, and pickles on sesame bun"
               fill
               priority={false}
@@ -25,7 +25,7 @@ export default function Gallery() {
           </article>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/gallery/crispy-chicken-burger.jpg"
+              src="/images/gallery/crispy-chicken-burger.webp"
               alt="Spicy crispy chicken burger with slaw and chipotle mayo"
               fill
               priority={false}
@@ -35,7 +35,7 @@ export default function Gallery() {
           </article>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/gallery/fries.jpg"
+              src="/images/gallery/fries.webp"
               alt="Golden crinkle-cut fries with sea salt in a metal basket"
               fill
               priority={false}
@@ -45,7 +45,7 @@ export default function Gallery() {
           </article>
           <article className={styles.gallery__item}>
             <Image
-              src="/images/gallery/chocolate-malt.jpg"
+              src="/images/gallery/chocolate-malt.webp"
               alt="Thick chocolate malt shake with whipped cream and cherry"
               fill
               priority={false}

@@ -8,7 +8,10 @@ import { getHeroLoaderState } from "@/lib/heroLoader.mjs";
 import styles from "./Hero.module.css";
 
 const TRACK_HEIGHT_VH = 400;
-const HERO_FRAME_COUNT = 299;
+// Keep the initial request small; the frame loader prefetches the current
+// scroll neighborhood as the user moves through the sequence.
+const READY_FRAME_COUNT = 8;
+const MAX_CONCURRENT_LOADS = 6;
 
 export default function ScrollySection() {
   const trackRef = useRef<HTMLElement>(null);
@@ -16,42 +19,57 @@ export default function ScrollySection() {
   const [loadedFrames, setLoadedFrames] = useState(0);
   const [firstFrameReady, setFirstFrameReady] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
+  const scrollFrameRef = useRef<number | null>(null);
 
   /* ── Scroll → progress mapping ──────────────────────────────────────── */
   const handleScroll = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
+    if (scrollFrameRef.current !== null) return;
+    scrollFrameRef.current = window.requestAnimationFrame(() => {
+      scrollFrameRef.current = null;
+      const track = trackRef.current;
+      if (!track) return;
 
-    const rect = track.getBoundingClientRect();
-    const trackH = track.offsetHeight;
-    const viewportH = window.innerHeight;
+      const rect = track.getBoundingClientRect();
+      const trackH = track.offsetHeight;
+      const viewportH = window.innerHeight;
 
-    // scrolled: how many px of the track have passed above the viewport top
-    // 0 when track top is at viewport top, trackH - viewportH when track bottom is at viewport bottom
-    const scrolled = -rect.top;
-    const scrollable = trackH - viewportH;
+      // scrolled: how many px of the track have passed above the viewport top
+      // 0 when track top is at viewport top, trackH - viewportH when track bottom is at viewport bottom
+      const scrolled = -rect.top;
+      const scrollable = trackH - viewportH;
 
-    const progress = Math.max(0, Math.min(1, scrolled / scrollable));
-    setScrollProgress(progress);
+      const progress = Math.max(0, Math.min(1, scrolled / scrollable));
+      setScrollProgress(progress);
+    });
   }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // set initial value
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollFrameRef.current !== null) window.cancelAnimationFrame(scrollFrameRef.current);
+    };
   }, [handleScroll]);
 
+  // Unlock scrolling as soon as the first frame renders — no need to hold the
+  // user hostage while the remaining 278 frames stream in the background.
   useEffect(() => {
-    if (heroReady) return;
+    if (firstFrameReady) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [heroReady]);
+  }, [firstFrameReady]);
 
   /* ── Loader ──────────────────────────────────────────────────────────── */
-  const loaderState = getHeroLoaderState(loadedFrames, HERO_FRAME_COUNT, heroReady);
+  // Progress tracks only the critical opening frames, not the full sequence.
+  const loaderState = getHeroLoaderState(
+    Math.min(loadedFrames, READY_FRAME_COUNT),
+    READY_FRAME_COUNT,
+    heroReady,
+  );
   /* ── Ghost text visibility (only during beat 1) ──────────────────────── */
   const showGhost = scrollProgress < 0.2;
 
@@ -88,8 +106,9 @@ export default function ScrollySection() {
           onLoadProgress={(loaded) => setLoadedFrames(loaded)}
           onFirstFrameReady={() => setFirstFrameReady(true)}
           onReady={() => setHeroReady(true)}
-          preloadAll
-          maxConcurrentLoads={4}
+          preloadAll={false}
+          readyFrameCount={READY_FRAME_COUNT}
+          maxConcurrentLoads={MAX_CONCURRENT_LOADS}
         />
 
         {/* ── Loading overlay ───────────────────────────────────────────── */}

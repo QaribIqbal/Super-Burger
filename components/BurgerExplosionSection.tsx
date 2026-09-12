@@ -16,19 +16,27 @@ export default function BurgerExplosionSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
+  const scrollFrameRef = useRef<number | null>(null);
 
   const updateProgress = useCallback(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const rect = section.getBoundingClientRect();
-    const scrollable = Math.max(section.offsetHeight - window.innerHeight, 1);
-    setProgress(Math.max(0, Math.min(1, -rect.top / scrollable)));
+    if (scrollFrameRef.current !== null) return;
+    scrollFrameRef.current = window.requestAnimationFrame(() => {
+      scrollFrameRef.current = null;
+      const section = sectionRef.current;
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      const scrollable = Math.max(section.offsetHeight - window.innerHeight, 1);
+      setProgress(Math.max(0, Math.min(1, -rect.top / scrollable)));
+    });
   }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", updateProgress, { passive: true });
     updateProgress();
-    return () => window.removeEventListener("scroll", updateProgress);
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      if (scrollFrameRef.current !== null) window.cancelAnimationFrame(scrollFrameRef.current);
+    };
   }, [updateProgress]);
 
   useEffect(() => {
@@ -75,7 +83,8 @@ export default function BurgerExplosionSection() {
           frameDir="/images/burger-explosion/ezgif-frame-"
           canvasWidth={2560}
           canvasHeight={1440}
-          preloadAll
+          loadWhenVisible
+          preloadAll={false}
           maxConcurrentLoads={2}
           requestPriority="low"
         />

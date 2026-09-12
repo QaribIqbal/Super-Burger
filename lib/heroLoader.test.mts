@@ -3,16 +3,16 @@ import { test } from "node:test";
 
 import { getHeroLoaderState } from "./heroLoader.mjs";
 
-test("the hero loader stays visible until the full animation sequence is ready", () => {
-  assert.deepEqual(getHeroLoaderState(298, 299, false), {
-    percent: 100,
+test("the hero loader tracks only the critical opening frames", () => {
+  assert.deepEqual(getHeroLoaderState(7, 8, false), {
+    percent: 88,
     visible: true,
-    label: "Loading the full burger build",
+    label: "Preparing your burger…",
   });
 
-  assert.deepEqual(getHeroLoaderState(299, 299, true), {
+  assert.deepEqual(getHeroLoaderState(8, 8, true), {
     percent: 100,
     visible: false,
-    label: "Ready to scroll",
+    label: "Ready",
   });
 });

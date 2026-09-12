@@ -7,7 +7,7 @@ export default function About() {
       <div className={styles.about__inner}>
         <div className={styles.about__visual}>
           <Image
-            src="/images/gallery/classic-burger-2026.jpg"
+            src="/images/gallery/classic-burger-2026.webp"
             alt="Founder at the grill, flipping burgers"
             fill
             priority={false}

@@ -55,6 +55,12 @@ export default function RootLayout({
     >
       <head>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/burger-build/frame-001.webp?v=burger-frames-2026-09-08-webp-1"
+          fetchPriority="high"
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         <a href="#main-content" className="skip-to-content">

@@ -112,9 +112,6 @@
   aspect-ratio: 16 / 9;
   display: block;
   mix-blend-mode: normal;
-  will-change: transform;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
 }
 
 

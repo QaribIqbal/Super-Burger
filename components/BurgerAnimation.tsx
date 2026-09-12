@@ -5,6 +5,7 @@ import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import { buildFrameAssetUrl, FRAME_ASSET_VERSION } from "@/lib/frameAssets.mjs";
 import {
   createSparseFrameOrder,
+  createCriticalFrameOrder,
   findNearestLoadedFrame,
   hasCriticalFrameSetReady,
   prioritizeFrameNeighborhood,
@@ -15,7 +16,7 @@ const DEFAULT_FRAME_COUNT = 299;
 const DEFAULT_FRAME_DIR = "/images/burger-build/frame-";
 const DEFAULT_CANVAS_W = 2560;
 const DEFAULT_CANVAS_H = 1440;
-const DEFAULT_ACTIVE_LOADS = 4;
+const DEFAULT_ACTIVE_LOADS = 6;
 const NEIGHBOR_RADIUS = 7;
 const KEYFRAME_STRIDE = 18;
 type FrameStatus = "idle" | "queued" | "loading" | "loaded" | "error";
@@ -39,7 +40,7 @@ interface BurgerAnimationProps {
 }
 
 const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
-  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, preloadAll = false, readyFrameCount = frameCount, maxConcurrentLoads = DEFAULT_ACTIVE_LOADS, requestPriority = "high", assetVersion = FRAME_ASSET_VERSION }, ref) => {
+  ({ scrollProgress, onLoadProgress, onFirstFrameReady, onReady, frameCount = DEFAULT_FRAME_COUNT, frameDir = DEFAULT_FRAME_DIR, canvasWidth = DEFAULT_CANVAS_W, canvasHeight = DEFAULT_CANVAS_H, loadWhenVisible = false, preloadAll = false, readyFrameCount = Math.min(frameCount, 8), maxConcurrentLoads = DEFAULT_ACTIVE_LOADS, requestPriority = "high", assetVersion = FRAME_ASSET_VERSION }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     // Forward the ref so parent can measure it if needed
@@ -146,21 +147,22 @@ const BurgerAnimation = forwardRef<HTMLCanvasElement, BurgerAnimationProps>(
         if (startedRef.current) return;
         startedRef.current = true;
 
-        // Make the opening render useful immediately.
-        for (let index = 0; index < Math.min(8, frameCount); index += 1) enqueue(index, index === 0);
+        // Immediately fill all concurrent slots with the first beat of frames
+        // so the loader has real data flowing from the very first tick.
+        for (const index of createCriticalFrameOrder(frameCount, readyFrameCount)) enqueue(index, index === 0);
         pump();
 
-        // The hero can opt into a complete preload so the loader can guarantee
-        // every scroll frame is ready before it hands control to the visitor.
+        // After a minimal delay, enqueue the rest of the sequence.
+        // 50ms is enough to yield to the browser's first paint without
+        // leaving concurrent slots idle.
         loadTimeoutRef.current = setTimeout(() => {
           if (preloadAll) {
-            for (let index = 8; index < frameCount; index += 1) enqueue(index);
+            for (let index = readyFrameCount; index < frameCount; index += 1) enqueue(index);
           } else {
-            // Lower sections stay lazy: exact frames are fetched on demand.
             for (const index of createSparseFrameOrder(frameCount, KEYFRAME_STRIDE)) enqueue(index);
           }
           pump();
-        }, 250);
+        }, 50);
       };
 
       if (loadWhenVisible) {
